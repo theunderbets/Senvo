@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -38,24 +39,70 @@ public class ResultActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.name);
         TextView score = findViewById(R.id.scoreText);
         TextView normal = findViewById(R.id.normal);
+        View aiBadge = findViewById(R.id.aiBadge);
+        TextView aiAdviceText = findViewById(R.id.aiAdviceText);
 
         Intent intent = getIntent();
         if (intent != null) {
-            name.setText(intent.getStringExtra("name"));
-            if (intent.getStringExtra("name").equals("Blood Pressure"))
-                score.setText(intent.getStringExtra("score"));
-            else
-                score.setText(intent.getIntExtra("score", 0) != -1 ? Integer.toString(intent.getIntExtra("score", 0)): "Insufficient data");
+            String nameText = intent.getStringExtra("name");
+            name.setText(nameText);
+            
+            String normalRange = intent.getStringExtra("normal");
+            normal.setText("Normal range\n" + normalRange);
+            
+            int scoreVal = intent.getIntExtra("score", 0);
+            boolean isAiRefined = intent.getBooleanExtra("ai_refined", false);
+            
+            String scoreString;
+            if (isAiRefined) {
+                aiBadge.setVisibility(View.VISIBLE);
+            }
 
-            normal.setText("Normal range\n" + intent.getStringExtra("normal"));
+            if (nameText.equals("Blood Pressure")) {
+                scoreString = intent.getStringExtra("score");
+                score.setText(scoreString);
+            } else {
+                if (scoreVal == -1) {
+                    scoreString = "Insufficient data";
+                    score.setText(scoreString);
+                    score.setTextSize(24);
+                } else {
+                    scoreString = Integer.toString(scoreVal) + (nameText.equals("Blood Oxygen") ? "%" : "");
+                    score.setText(scoreString);
+                }
+            }
 
-            DatabaseReference database = FirebaseDatabase.getInstance("https://sih-raamen-default-rtdb.firebaseio.com/").getReference("username");
-            HashMap<String, Object> map = new HashMap<>();
+            // Fetch AI Advice from NVIDIA
+            if (!scoreString.equals("Insufficient data")) {
+                NvidiaHealthManager.getInstance().getAiAdvice(this, nameText, scoreString, normalRange, response -> {
+                    try {
+                        String advice = response.getJSONArray("choices")
+                                .getJSONObject(0)
+                                .getJSONObject("message")
+                                .getString("content");
+                        aiAdviceText.setText(advice);
+                    } catch (Exception e) {
+                        aiAdviceText.setText("Advice unavailable. Please consult a doctor.");
+                    }
+                });
+            } else {
+                aiAdviceText.setText("No data to analyze.");
+            }
 
-            map.put("date", System.currentTimeMillis());
-            map.put("type", intent.getStringExtra("name"));
-            map.put("score", intent.getIntExtra("score", 0));
-            database.child(Long.toString(System.currentTimeMillis())).setValue(map);
+            // Only save if we have valid data
+            if (scoreVal != -1 || nameText.equals("Blood Pressure")) {
+                DatabaseReference database = FirebaseDatabase.getInstance("https://sih-raamen-default-rtdb.firebaseio.com/").getReference("username");
+                HashMap<String, Object> map = new HashMap<>();
+
+                map.put("date", System.currentTimeMillis());
+                map.put("type", nameText);
+                if (nameText.equals("Blood Pressure")) {
+                    map.put("score", intent.getStringExtra("score"));
+                } else {
+                    map.put("score", scoreVal);
+                }
+                database.child(Long.toString(System.currentTimeMillis())).setValue(map);
+            }
         }
     }
 }

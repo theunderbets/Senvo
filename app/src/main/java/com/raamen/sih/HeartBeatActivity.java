@@ -1,204 +1,232 @@
 package com.raamen.sih;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.SurfaceTexture;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Surface;
-import android.view.TextureView;
-import android.view.View;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.widget.SwitchCompat;
+import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.google.common.util.concurrent.ListenableFuture;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class HeartBeatActivity extends AppCompatActivity {
-    public ArrayList<Integer> array;
 
-    private final int REQUEST_CODE_CAMERA = 0;
-    public static final int MESSAGE_UPDATE_REALTIME = 1;
-    public static final int MESSAGE_UPDATE_FINAL = 2;
-    public static final int MESSAGE_CAMERA_NOT_AVAILABLE = 3;
+    private static final String TAG = "HeartBeatActivity";
+    private static final int PERMISSION_REQUEST_CAMERA = 10;
+    private static final int MEASUREMENT_DURATION = 30000; // 30 seconds
 
-    private static final int MENU_INDEX_NEW_MEASUREMENT = 0;
-    private static final int MENU_INDEX_EXPORT_RESULT = 1;
-    private static final int MENU_INDEX_EXPORT_DETAILS = 2;
+    private PreviewView previewView;
+    private TextView bpmText;
+    private TextView statusText;
+    private ProgressBar progressBar;
+    private LineChart ppgChart;
+    private SwitchCompat aiSwitch;
 
-    public enum VIEW_STATE {
-        MEASUREMENT,
-        SHOW_RESULTS
-    }
-
-    private boolean justShared = false;
-
-    @SuppressLint("HandlerLeak")
-    private final Handler mainHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-
-            if (msg.what ==  MESSAGE_UPDATE_REALTIME) {
-                //((TextView) findViewById(R.id.textView)).setText(msg.obj.toString());
-            }
-
-            if (msg.what == MESSAGE_UPDATE_FINAL) {
-                //((EditText) findViewById(R.id.editText)).setText(msg.obj.toString());
-
-                // make sure menu items are enabled when it opens.
-                //Menu appMenu = ((Toolbar) findViewById(R.id.toolbar)).getMenu();
-
-                //setViewState(VIEW_STATE.SHOW_RESULTS);
-            }
-
-            if (msg.what == MESSAGE_CAMERA_NOT_AVAILABLE) {
-                Log.println(Log.WARN, "camera", msg.obj.toString());
-
-//                ((TextView) findViewById(R.id.textView)).setText(
-//                        R.string.camera_not_found
-//                );
-                //analyzer.stop();
-            }
-        }
-    };
-
-    public boolean isPeak(double arr[], int n, double num, int i, int j)
-    {
-        if (i >= 0 && arr[i] >= num)
-            return false;
-
-        if (j < n && arr[j] >= num)
-            return false;
-        return true;
-    }
-
-    public int printPeaksTroughs(double arr[], int n)
-    {
-        int count=0;
-        //System.out.print("Peaks : ");
-
-        for (int i = 0; i < n; i++)
-        {
-            if (isPeak(arr, n, arr[i], i - 1, i + 1))
-            {
-                //System.out.println(arr[i]);
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private final CameraService cameraService = new CameraService(this, mainHandler);
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        TextureView cameraTextureView = findViewById(R.id.textureView);
-        SurfaceTexture previewSurfaceTexture = cameraTextureView.getSurfaceTexture();
-
-        if ((previewSurfaceTexture != null) && !justShared) {
-            Surface previewSurface = new Surface(previewSurfaceTexture);
-
-            cameraService.start(previewSurface);
-            measurePulse(cameraTextureView, cameraService);
-        }
-    }
-
-    void measurePulse(TextureView textureView, CameraService cameraService) {
-
-        final int measurementInterval = 45;
-        final int measurementLength = 15000;
-        final int clipLength = 3500;
-        final int[] ticksPassed = {0};
-
-        CountDownTimer timer = new CountDownTimer(measurementLength, measurementInterval) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                if (clipLength > (++ticksPassed[0] * measurementInterval)) return;
-
-                Thread thread = new Thread(() -> {
-                    Bitmap currentBitmap = textureView.getBitmap();
-                    Bitmap newBitmap = Bitmap.createScaledBitmap(currentBitmap, 84, 84, false);
-                    int pixelCount = newBitmap.getWidth() * newBitmap.getHeight();
-                    int measurement = 0;
-                    int[] pixels = new int[pixelCount];
-
-                    newBitmap.getPixels(pixels, 0, newBitmap.getWidth(), 0, 0, newBitmap.getWidth(), newBitmap.getHeight());
-
-                    for (int pixelIndex = 0; pixelIndex < pixelCount; pixelIndex++) {
-                        measurement += (pixels[pixelIndex] >> 16) & 0xff;
-                    }
-
-                    array.add(measurement);
-
-                });
-                thread.start();
-            }
-
-            @Override
-            public void onFinish() {
-                Log.i("helloarr", array.toString());
-
-                double[] arr = new double[array.size()];
-
-                for (int i = 0; i < array.size(); i++) {
-                    arr[i] = array.get(i);
-                }
-
-                int peaks = printPeaksTroughs(arr, arr.length);
-                Log.i("hellopeak", Integer.toString(peaks*2));
-
-                if (cameraService != null)
-                    cameraService.stop();
-
-                Intent intent = new Intent(HeartBeatActivity.this, ResultActivity.class);
-                intent.putExtra("name", "Heart Rate");
-                intent.putExtra("score", (peaks*2) < 50 ? -1 : peaks*2);
-                intent.putExtra("normal", "60 - 100");
-                startActivity(intent);
-                finish();
-            }
-        };
-
-        timer.start();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        cameraService.stop();
-    }
+    private SignalProcessor signalProcessor;
+    private boolean isMeasurementActive = false;
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heartbeat);
 
-        array = new ArrayList<>();
+        previewView = findViewById(R.id.previewView);
+        bpmText = findViewById(R.id.bpmText);
+        statusText = findViewById(R.id.statusText);
+        progressBar = findViewById(R.id.HRPB);
+        ppgChart = findViewById(R.id.ppgChart);
+        aiSwitch = findViewById(R.id.aiSwitch);
+
+        signalProcessor = new SignalProcessor();
+        setupChart();
+
+        if (allPermissionsGranted()) {
+            startCamera();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+        }
+    }
+
+    private void setupChart() {
+        ppgChart.getDescription().setEnabled(false);
+        ppgChart.setDrawGridBackground(false);
+        ppgChart.getLegend().setEnabled(false);
+        ppgChart.getXAxis().setEnabled(false);
+        ppgChart.getAxisLeft().setEnabled(false);
+        ppgChart.getAxisRight().setEnabled(false);
+        ppgChart.setNoDataText("Initializing signal...");
+    }
+
+    private void startCamera() {
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindCameraUseCases(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Camera initialization failed", e);
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void bindCameraUseCases(@NonNull ProcessCameraProvider cameraProvider) {
+        Preview preview = new Preview.Builder().build();
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build();
+
+        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new VitalsAnalyzer((r, g, b) -> {
+            runOnUiThread(() -> processIntensity(r, g, b));
+        }));
+
+        try {
+            cameraProvider.unbindAll();
+            Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
+            
+            // Enable Flash/Torch
+            if (camera.getCameraInfo().hasFlashUnit()) {
+                camera.getCameraControl().enableTorch(true);
+            }
+            
+            startMeasurement();
+        } catch (Exception e) {
+            Log.e(TAG, "Use case binding failed", e);
+        }
+    }
+
+    private void processIntensity(double r, double g, double b) {
+        signalProcessor.addSample(r, g, b);
+        updateChart();
+
+        if (signalProcessor.isReady()) {
+            if (signalProcessor.getSQI()) {
+                int bpm = signalProcessor.calculateBPM();
+                if (bpm != -1) {
+                    bpmText.setText(String.valueOf(bpm));
+                    statusText.setText("Recording steady signal...");
+                    statusText.setTextColor(Color.GREEN);
+                }
+            } else {
+                statusText.setText("Adjust finger position - noisy signal");
+                statusText.setTextColor(Color.RED);
+            }
+        }
+    }
+
+    private void updateChart() {
+        List<Double> samples = signalProcessor.getFilteredSamples();
+        if (samples.isEmpty()) return;
+
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < samples.size(); i++) {
+            entries.add(new Entry(i, samples.get(i).floatValue()));
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "PPG");
+        dataSet.setColor(Color.parseColor("#2A0371"));
+        dataSet.setDrawCircles(false);
+        dataSet.setDrawValues(false);
+        dataSet.setLineWidth(2f);
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+        LineData lineData = new LineData(dataSet);
+        ppgChart.setData(lineData);
+        ppgChart.notifyDataSetChanged();
+        ppgChart.invalidate();
+    }
+
+    private void startMeasurement() {
+        isMeasurementActive = true;
+        new CountDownTimer(MEASUREMENT_DURATION, 100) {
+            public void onTick(long millisUntilFinished) {
+                int progress = (int) ((MEASUREMENT_DURATION - millisUntilFinished) * 100 / MEASUREMENT_DURATION);
+                progressBar.setProgress(progress);
+            }
+
+            public void onFinish() {
+                isMeasurementActive = false;
+                finishMeasurement();
+            }
+        }.start();
+    }
+
+    private void finishMeasurement() {
+        int finalBpm = signalProcessor.calculateBPM();
+        boolean valid = signalProcessor.getSQI();
+
+        if (valid && finalBpm != -1 && aiSwitch.isChecked()) {
+            try {
+                JSONObject payload = new JSONObject();
+                payload.put("raw_bpm", finalBpm);
+                
+                NvidiaHealthManager.getInstance().refineVitals(this, payload, response -> {
+                    int refinedBpm = response.optInt("refined_bpm", finalBpm);
+                    sendResult(refinedBpm, true);
+                });
+            } catch (Exception e) {
+                sendResult(finalBpm, false);
+            }
+        } else {
+            sendResult((valid && finalBpm != -1) ? finalBpm : -1, false);
+        }
+    }
+
+    private void sendResult(int score, boolean aiRefined) {
+        Intent intent = new Intent(HeartBeatActivity.this, ResultActivity.class);
+        intent.putExtra("name", "Heart Rate");
+        intent.putExtra("score", score);
+        intent.putExtra("ai_refined", aiRefined);
+        intent.putExtra("normal", "60 - 100");
+        startActivity(intent);
+        finish();
+    }
+
+    private boolean allPermissionsGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            if (allPermissionsGranted()) {
+                startCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 }

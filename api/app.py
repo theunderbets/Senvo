@@ -40,6 +40,18 @@ def api_test():
         return "HELLO THERE"
 
 
+@app.route("/save", methods=['POST'])
+def save_vitals():
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json_data = request.json
+        print(f"Saving vitals: {json_data}")
+        # Here you could save to a database or file
+        with open('vitals_log.txt', 'a') as f:
+            f.write(str(json_data) + '\n')
+        return jsonify({"message": "success", "status": "saved locally"})
+    return jsonify({"message": "error", "reason": "Invalid Content-Type"})
+
 
 @app.route("/test", methods=['GET', 'POST'])
 def test():

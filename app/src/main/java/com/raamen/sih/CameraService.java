@@ -44,7 +44,7 @@ class CameraService {
             Log.e("camera", "No access to camera", e);
             handler.sendMessage(Message.obtain(
                 handler,
-                HeartBeatActivity.MESSAGE_CAMERA_NOT_AVAILABLE,
+                VitalsConstants.MESSAGE_CAMERA_NOT_AVAILABLE,
                 "No access to camera...."));
         }
 
@@ -54,7 +54,7 @@ class CameraService {
                 Log.println(Log.ERROR, "camera", "No permission to take photos");
                 handler.sendMessage(Message.obtain(
                     handler,
-                    HeartBeatActivity.MESSAGE_CAMERA_NOT_AVAILABLE,
+                    VitalsConstants.MESSAGE_CAMERA_NOT_AVAILABLE,
                     "No permission to take photos"));
                 return;
             }
@@ -122,7 +122,7 @@ class CameraService {
                 Log.println(Log.ERROR, "camera", e.getMessage());
                 handler.sendMessage(Message.obtain(
                     handler,
-                    HeartBeatActivity.MESSAGE_CAMERA_NOT_AVAILABLE,
+                    VitalsConstants.MESSAGE_CAMERA_NOT_AVAILABLE,
                     e.getMessage()));
             }
         }

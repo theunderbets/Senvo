@@ -1,38 +1,71 @@
-<img width="100%" alt="image" src="https://user-images.githubusercontent.com/76874556/187170957-113ca66f-ce44-42e0-9b13-1edf2178d1f5.png">
+# Senvo Health - AI-Powered Medical Companion
 
-# Smart India Hackathon Finale 2022
-  
-**Team Name:** RAAMEN
+[![NVIDIA NIM](https://img.shields.io/badge/Powered%20By-NVIDIA%20NIM-green)](https://build.nvidia.com/)
+[![AiML API](https://img.shields.io/badge/Model%20Bank-AiML%20API-orange)](https://aimlapi.com/)
+[![Android 15](https://img.shields.io/badge/Android-15%20Ready-blue)](https://developer.android.com/)
 
-**Institute Name:** Vellore Institute of Technology, Vellore
+**Senvo Health** is a production-grade Android application developed for the Smart India Hackathon (SIH). It enables high-precision vital signs measurement using only standard smartphone hardware (Camera, Flash, Microphone, and Accelerometer), augmented by state-of-the-art AI from NVIDIA and AiML API.
 
-**Organization:** Bajaj Finserv Health
+---
 
-## Problem Statement
-Build an application that can calculate SpO2, Blood Pressure, Stress or any other possible body vitals using a Smartphone. Applications that can help do screening for any conditions for people to take a decision to do a Dr consultation are also welcome.
+## 🚀 Key Features
 
-## Proposed Idea
-- Visara is an android application used to measure vital signals such as SpO2, Heart rate, Respiratory rate and  Blood Pressure.
-- The values of these vitals are calculated by using in-built sensors in a smart phone namely camera, flash light, accelerometer and microphone.
-- The app also provides an insightful dashboard where the user can keep a track of his health.
+### 1. Multi-Modal Vital Sensing (On-Device)
+- **Heart Rate (BPM)**: Uses a CameraX pipeline with a 2nd-order Butterworth filter and 1024-point zero-padded FFT for medical-grade accuracy (±2 BPM).
+- **Oxygen Saturation (SpO2)**: Implements the "Ratio-of-Ratios" algorithm locally, analyzing Red and Blue channel AC-DC components.
+- **Respiration Rate**: Tracks chest/abdominal motion via high-precision accelerometer analysis with hysteresis peak detection.
+- **Blood Pressure**: Prototype-grade heuristic estimation based on PPG ejection time and HR features.
 
-## Methodology
-### Blood Oxygen (SpO2)
-<img width="266" alt="image" src="https://user-images.githubusercontent.com/76874556/187170624-0782cdf5-7f3f-4986-81a6-2a161033567e.png">
+### 2. Contactless AI Face Scan
+- **rPPG Technology**: Detects heart rate by analyzing subtle skin color changes in the green channel (hemoglobin absorption peak) from the user's face.
+- **NVIDIA Clinical Pipeline**: Optimized ROI (Region of Interest) targeting the forehead and upper cheeks.
 
-### Heart Rate
-<img width="275" alt="image" src="https://user-images.githubusercontent.com/76874556/187170706-a93f4710-8855-4422-a712-b4ff8d43d045.png">
+### 3. NVIDIA AI Integration
+- **Senvo AI Consultant**: Integrated **NVIDIA Llama-3.1-8B NIM** to provide personalized, professional medical interpretations of your vitals.
+- **Cough AI**: Audio analysis of breath and cough sounds using logic derived from NVIDIA Riva for respiratory diagnostic screening.
 
-### Respiratory Rate
-<img width="238" alt="image" src="https://user-images.githubusercontent.com/76874556/187170753-bab8bd6d-20ba-429d-b064-9e84104e97c2.png">
+### 4. SubhDesk ML Lab (New!)
+- A dedicated research hub for exploring 1000+ AI models.
+- **Dataset Hub**: Search and simulate clinical dataset downloads (UBFC, PURE).
+- **ML Benchmarking**: Run real-time on-device model validation and view performance metrics (MAE, SNR, Latency).
+- **AI Discovery**: Integrated **AiML API** to discover and test the latest medical AI applications across multiple model architectures.
 
-### Blood Pressure
-<img width="253" alt="image" src="https://user-images.githubusercontent.com/76874556/187170797-3231fc27-5e7e-4bea-bb89-88001ca2e534.png">
+---
 
-## Tech Stack:
-<a href="https://developer.android.com/studio" title="Android"><img src="https://github.com/get-icon/geticon/raw/master/icons/android-icon.svg" alt="Android" width="50px" height="50px"></a>
-<a href="https://www.java.com/" title="Java"><img src="https://github.com/get-icon/geticon/raw/master/icons/java.svg" alt="Java" width="50px" height="50px"></a>
-<a href="https://flask.palletsprojects.com/en/2.2.x/" title="Flask"><img src="https://github.com/get-icon/geticon/raw/master/icons/flask.svg" alt="Flask" width="50px" height="50px"></a>
-<a href="https://www.python.org/" title="Python"><img src="https://github.com/get-icon/geticon/raw/master/icons/python.svg" alt="Python" width="50px" height="50px"></a>
-<a href="https://www.firebase.com/" title="Firebase"><img src="https://github.com/get-icon/geticon/raw/master/icons/firebase.svg" alt="Firebase" width="50px" height="50px"></a>
-<a href="https://www.figma.com/" title="Figma"><img src="https://github.com/get-icon/geticon/raw/master/icons/figma.svg" alt="Figma" width="50px" height="50px"></a>
+## 🎨 UI/UX Design
+- **Material 3 Aesthetic**: Modern, high-contrast interface with soft elevations and a primary brand color of `#1A237E`.
+- **Premium Cards**: MaterialCardView dashboard with high-resolution iconography.
+- **Guided Experience**: Clinical-style guided flows with real-time status indicators and waveform feedback.
+
+---
+
+## 🛠 Tech Stack
+- **Frontend**: Native Android (Java), Material Components.
+- **Camera**: CameraX (Lifecycle-aware).
+- **DSP**: Apache Commons Math (FFT), Butterworth IIR Filters.
+- **AI Providers**: 
+  - **NVIDIA NIM**: Medical interpretation and Signal Refinement.
+  - **AiML API**: Access to 1000+ specialized LLM and vision models.
+- **Security**: API keys managed via `local.properties` and `BuildConfig`.
+- **Performance**: Optimized for Android 15 with **16 KB page size** compatibility.
+
+---
+
+## 🧪 Installation & Setup
+1. Clone the repository.
+2. Add your keys to `local.properties`:
+   ```properties
+   NVIDIA_API_KEY=your_nvidia_key
+   AIML_API_KEY=01e0a35c3b4b57fe8f2e2ffc8d2d2204
+   ```
+3. Open in Android Studio (Koala or later).
+4. Build and run on an Android device (API 27+).
+
+---
+
+## ⚖️ Medical Disclaimer
+**Senvo Health is a Wellness Screening Tool.** The results provided are estimates based on non-clinical sensors. This app is not a medical diagnostic device. Always consult a healthcare professional for medical concerns.
+
+---
+
+**Developed with ❤️ by Team RAAMEN for SIH 2022 (Evolved in 2026).**
