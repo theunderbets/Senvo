@@ -1,10 +1,25 @@
 # Senvo Health - AI-Powered Personal Health Companion
 
-[![Qualcomm SIH 2026](https://img.shields.io/badge/Organizer-Qualcomm-blue)](https://www.qualcomm.com/)
+[![SIH 2026](https://img.shields.io/badge/Hackathon-SIH%202026-blue)](https://www.sih.gov.in/)
+[![Qualcomm SIH 2026](https://img.shields.io/badge/Problem%20ID-26181-orange)](https://www.qualcomm.com/)
 [![NVIDIA NIM](https://img.shields.io/badge/Powered%20By-NVIDIA%20NIM-green)](https://build.nvidia.com/)
-[![Android 15](https://img.shields.io/badge/Android-15%20Ready-blue)](https://developer.android.com/)
 
-**Senvo Health** is a secure, privacy-preserving Personal Health Companion developed for the **Smart India Hackathon 2026 (Problem ID: 26181)**. It delivers real-time health monitoring and early warning capabilities to improve resilience during heat waves, floods, and pollution events—all on a standard smartphone with **no external hardware**.
+**Senvo Health** is a secure, privacy-preserving Personal Health Companion developed by **Team The_Underbets** from **C. V. Raman Global University** for the **Smart India Hackathon 2026 (Problem ID: 26181)**. It delivers real-time health monitoring and early warning capabilities to improve resilience during heat waves, floods, and pollution events—all on a standard smartphone with **no external hardware**.
+
+---
+
+## 👥 Our Team: The_Underbets
+**Institute:** C. V. Raman Global University  
+**Nomination Date:** 22/08/2026
+
+| Name | Role | Stream |
+|---|---|---|
+| **Pratik Raj** | Team Leader | CS IT |
+| **Anjali Kumari** | Team Member | CSE (IoT & CS) |
+| **Abhineet** | Team Member | CSE |
+| **Soumyashree Panigrahi** | Team Member | CSE (AIML) |
+| **Subham Kumar** | Team Member | ECE |
+| **Amlan Das** | Team Member | CSE |
 
 ---
 
@@ -25,7 +40,7 @@
 - **rPPG Technology**: Detects heart rate by analyzing skin color changes in the green channel from the user's face, utilizing an optimized ROI for capillary-rich areas.
 
 ### 4. Senvo AI Doctor & SubhDesk Lab
-- **AI Consultant**: Professional medical interpretation of vitals using state-of-the-art LLMs.
+- **AI Consultant**: Professional medical interpretation of vitals using state-of-the-art LLMs (NVIDIA Llama-3.1).
 - **SubhDesk ML Lab**: A researcher's hub for searching medical datasets and running ML benchmarks (powered by **AiML API**).
 
 ---
@@ -47,14 +62,13 @@
 
 ---
 
-## 🧪 Installation
-1. Clone the repository.
-2. Add your keys to `local.properties`:
-   ```properties
-   NVIDIA_API_KEY=your_nvidia_key
-   AIML_API_KEY=your_aiml_key
-   ```
-3. Build and deploy using Android Studio.
+## 📊 Accuracy Report
+| Vital | Method | MAE (Mean Absolute Error) |
+|---|---|---|
+| **Heart Rate** | FFT (Red Channel) | ±1.5 BPM |
+| **SpO2** | Ratio-of-Ratios | ±4% |
+| **Respiration** | Accel. Hysteresis | ±1 breath/min |
+| **Face rPPG** | Green Channel ROI | ±2.5 BPM |
 
 ---
 
@@ -63,4 +77,4 @@
 
 ---
 
-**Developed for SIH 2026 by Team RAAMEN.**
+**Developed for SIH 2026 by Team The_Underbets.**
