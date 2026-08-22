@@ -84,6 +84,15 @@ public class VitalsActivity extends AppCompatActivity {
             }
         });
 
+        CardView warningCenter = findViewById(R.id.warning_center);
+        warningCenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(VitalsActivity.this, DisasterGuardActivity.class);
+                startActivity(intent);
+            }
+        });
+
         stress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
