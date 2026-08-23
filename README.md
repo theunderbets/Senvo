@@ -75,6 +75,9 @@
 ## ⚖️ Medical Disclaimer
 **Senvo Health is a Wellness Screening Tool.** Results are estimates for early warning purposes and not for medical diagnosis. Always consult a professional for medical emergencies.
 
+## 📄 Ownership & Legal
+**Senvo Health** is the exclusive property of **Team The_Underbets**. For full details, please refer to the [Ownership Statement](file:///C:/Users/subha/AndroidStudioProjects/raamen-sih/The_Underbets_Ownership/Ownership_Statement.txt).
+
 ---
 
 **Developed for SIH 2026 by Team The_Underbets.**

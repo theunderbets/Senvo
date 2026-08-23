@@ -1,0 +1,15 @@
+SENVO HEALTH - OWNERSHIP STATEMENT
+Copyright (c) 2026 Team The_Underbets
+
+This software and its documentation are the exclusive property of Team The_Underbets from C. V. Raman Global University.
+
+Team Members:
+1. Pratik Raj (Team Leader)
+2. Anjali Kumari
+3. Abhineet
+4. Soumyashree Panigrahi
+5. Subham Kumar
+6. Amlan Das
+
+All rights reserved. Unauthorized copying, modification, or distribution of this software, via any medium, is strictly prohibited.
+This project was developed specifically for the Smart India Hackathon 2026.
