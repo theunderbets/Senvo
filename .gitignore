@@ -5,3 +5,7 @@ build/
 .idea/
 *.iml
 .DS_Store
+android/.gradle/
+android/local.properties
+android/.cxx/
+ios/Flutter/ephemeral/
