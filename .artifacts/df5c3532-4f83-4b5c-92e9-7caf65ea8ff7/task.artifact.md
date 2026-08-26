@@ -1,6 +1,0 @@
-- [ ] Update `AndroidManifest.xml` for 16KB support and flash requirement
-- [ ] Add missing string resources to `strings.xml`
-- [ ] Update `activity_main.xml` to use string resources
-- [ ] Refactor `MainActivity.java` (lambdas, strings, variables)
-- [ ] Update `app/build.gradle` (SDK versions, dependencies, packaging)
-- [ ] Verify build with `gradle :app:assembleDebug`
