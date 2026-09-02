@@ -7,29 +7,30 @@ class WaveformWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
     height: 120,
-    child: LineChart(
-      LineChartData(
-        minY: -1,
-        maxY: 1,
-        titlesData: const FlTitlesData(show: false),
-        gridData: const FlGridData(show: false),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: samples.isEmpty
-                ? const [FlSpot(0, 0)]
-                : samples
-                      .asMap()
-                      .entries
-                      .map((entry) => FlSpot(entry.key.toDouble(), entry.value))
-                      .toList(),
-            isCurved: true,
-            barWidth: 2,
-            dotData: const FlDotData(show: false),
-            color: const Color(0xff63d7b0),
-            belowBarData: BarAreaData(show: true, color: Color(0x2263d7b0)),
-          ),
-        ],
+    child: ClipRect(
+      child: LineChart(
+        LineChartData(
+          clipData: const FlClipData.all(),
+          titlesData: const FlTitlesData(show: false),
+          gridData: const FlGridData(show: false),
+          borderData: FlBorderData(show: false),
+          lineBarsData: [
+            LineChartBarData(
+              spots: samples.isEmpty
+                  ? const [FlSpot(0, 0)]
+                  : samples
+                        .asMap()
+                        .entries
+                        .map((entry) => FlSpot(entry.key.toDouble(), entry.value))
+                        .toList(),
+              isCurved: true,
+              barWidth: 2,
+              dotData: const FlDotData(show: false),
+              color: const Color(0xff63d7b0),
+              belowBarData: BarAreaData(show: true, color: Color(0x2263d7b0)),
+            ),
+          ],
+        ),
       ),
     ),
   );

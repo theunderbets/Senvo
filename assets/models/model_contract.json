@@ -1,0 +1,25 @@
+{
+  "model_version": "ppg-vitals-metadata-1",
+  "model_file": "senvo_vitals.tflite",
+  "input_tensors": [
+    {
+      "index": 0,
+      "name": "ppg_features",
+      "shape": [1, 23],
+      "dtype": "float32",
+      "quantization": {"scale": 0.0, "zero_point": 0}
+    }
+  ],
+  "output_tensors": [
+    {"index": 0, "name": "output_0", "shape": [1, 4], "dtype": "float32"}
+  ],
+  "output_order": ["heart_rate_bpm", "spo2_percent", "systolic_bp", "diastolic_bp"],
+  "preprocessing_version": "metadata-selected-features-v1",
+  "feature_version": "metadata-selected-features-v1",
+  "sampling_rate_hz": 30,
+  "window_samples": 300,
+  "selected_features": [
+    "ppg_n_raw_channels", "ppg_n_samples", "ppg_mean", "ppg_std", "ppg_min", "ppg_max", "ppg_ptp", "ppg_rms", "ppg_n_peaks", "ppg_hr_bpm", "ppg_mean_pulse_width_s", "ppg_rise_time_s", "ppg_crest_factor", "ppg_dominant_freq_hz", "ppg_spectral_entropy", "age_years", "height_cm", "weight_kg", "glycaemia_mmol_l", "gender_F", "gender_M", "dataset_source_but_ppg_v2", "ppg_channel_used_PLETH"
+  ],
+  "notes": "The supplied metadata does not define a raw-signal preprocessing implementation or user demographics. The service requires a precomputed 23-value feature vector and applies no invented defaults."
+}

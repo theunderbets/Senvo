@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:senvo_health/features/ppg_scan/data/models/roi_config.dart';
 import 'package:senvo_health/features/ppg_scan/domain/entities/ppg_sample.dart';
 import 'package:senvo_health/features/ppg_scan/domain/entities/vitals_result.dart';
+import 'package:senvo_health/features/ppg_scan/domain/usecases/vital_estimators.dart';
 
 void main() {
   test('default ROI is the required 64 by 64 region', () {
@@ -21,5 +22,20 @@ void main() {
     );
     expect(sample.green, 20);
     expect(result.experimental, isTrue);
+  });
+
+  test('estimator rejects invalid flat timing data', () {
+    final estimator = const ExperimentalVitalEstimator();
+    final invalidSamples = List.generate(
+      30,
+      (index) => PPGSample(
+        timestamp: 1,
+        red: 120 + index.toDouble(),
+        green: 110 + index.toDouble(),
+        blue: 100 + index.toDouble(),
+      ),
+    );
+
+    expect(() => estimator.estimate(invalidSamples), throwsStateError);
   });
 }

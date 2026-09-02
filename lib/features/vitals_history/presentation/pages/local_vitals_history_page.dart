@@ -5,18 +5,37 @@ import '../../domain/entities/vital_record.dart';
 import '../../domain/repositories/vitals_repository.dart';
 import '../bloc/history_bloc.dart';
 import '../bloc/history_event.dart';
+import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../bloc/history_state.dart';
-
-class LocalVitalsHistoryPage extends StatelessWidget {
+class LocalVitalsHistoryPage extends StatefulWidget {
   const LocalVitalsHistoryPage({required this.repository, super.key});
   final VitalsRepository repository;
+
   @override
-  Widget build(BuildContext context) => BlocProvider(
-    create: (_) => HistoryBloc(repository)..add(const LoadHistory()),
-    child: Scaffold(
+  State<LocalVitalsHistoryPage> createState() => _LocalVitalsHistoryPageState();
+}
+
+class _LocalVitalsHistoryPageState extends State<LocalVitalsHistoryPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<HistoryBloc>().add(const LoadHistory());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Local history'),
         actions: [
+          IconButton(
+            onPressed: () => _exportToCsv(context, context.read<HistoryBloc>().state.records),
+            icon: const Icon(Icons.download),
+            tooltip: 'Export CSV',
+          ),
           IconButton(
             onPressed: () => _confirmClear(context),
             icon: const Icon(Icons.delete_outline),
@@ -75,8 +94,8 @@ class LocalVitalsHistoryPage extends StatelessWidget {
           );
         },
       ),
-    ),
-  );
+    );
+  }
   Future<void> _confirmClear(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -99,6 +118,59 @@ class LocalVitalsHistoryPage extends StatelessWidget {
     );
     if (confirmed == true && context.mounted) {
       context.read<HistoryBloc>().add(const ClearHistory());
+    }
+  }
+
+  Future<void> _exportToCsv(BuildContext context, List<VitalRecord> records) async {
+    if (records.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No records to export')),
+      );
+      return;
+    }
+
+    try {
+      final List<List<dynamic>> csvData = [
+        ['Timestamp', 'Heart Rate (BPM)', 'SpO2 (%)', 'Systolic BP (mmHg)', 'Diastolic BP (mmHg)', 'Signal Quality']
+      ];
+
+      for (final r in records) {
+        csvData.add([
+          r.timestamp.toIso8601String(),
+          r.heartRateBpm,
+          r.spo2Percent,
+          r.systolicBp,
+          r.diastolicBp,
+          r.signalQualityIndex,
+        ]);
+      }
+
+      final csvString = const ListToCsvConverter().convert(csvData);
+      
+      final directory = await getTemporaryDirectory();
+      
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final file = File('${directory.path}/senvo_history_$timestamp.csv');
+      await file.writeAsString(csvString);
+
+      if (context.mounted) {
+        final result = await Share.shareXFiles([XFile(file.path)], text: 'Senvo Vitals History');
+        
+        if (result.status == ShareResultStatus.success && context.mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Successfully exported history'),
+              backgroundColor: Color(0xff63d7b0),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to export CSV: $e')),
+        );
+      }
     }
   }
 

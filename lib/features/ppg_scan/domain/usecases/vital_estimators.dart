@@ -13,7 +13,13 @@ class ExperimentalVitalEstimator implements VitalEstimator {
   VitalsResult estimate(List<PPGSample> samples) {
     if (samples.length < 30) throw StateError('Insufficient samples');
     final duration = samples.last.timestamp - samples.first.timestamp;
+    if (!duration.isFinite || duration <= 0) {
+      throw StateError('Invalid sample timing');
+    }
     final fs = (samples.length - 1) / duration;
+    if (!fs.isFinite || fs <= 0) {
+      throw StateError('Invalid sample rate');
+    }
     final green = samples.map((sample) => sample.green).toList();
     final filtered = normalize(
       ButterworthBandpass(

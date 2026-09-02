@@ -60,8 +60,15 @@ class VitalsSummaryPage extends StatelessWidget {
           'SpO2 and blood pressure are experimental, non-clinical estimates. Do not use them for medical decisions.',
           style: TextStyle(color: Color(0xffa4b8b7), height: 1.4),
         ),
-        const SizedBox(height: 24),
         FilledButton.icon(
+          onPressed: () {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+          icon: const Icon(Icons.check),
+          label: const Text('Save & Return to Dashboard'),
+        ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
           onPressed: onScanAgain,
           icon: const Icon(Icons.refresh),
           label: const Text('Scan again'),
