@@ -49,7 +49,7 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                 child: Text(
                   'Error loading risk data:\n${state.message}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: context.themeColors.riskEmergency),
+                  style: TextStyle(color: context.themeColors.riskEmergency),
                 ),
               ),
             );
@@ -71,10 +71,10 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Row(
+                          Row(
                             children: [
                               Icon(Icons.warning_amber_rounded, color: context.themeColors.riskEmergency),
-                              SizedBox(width: SenvoSpacing.sm),
+                              const SizedBox(width: SenvoSpacing.sm),
                               Text(
                                 'CRITICAL ALERTS',
                                 style: TextStyle(
@@ -88,7 +88,7 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                           ...result.criticalAlerts.map((alert) => Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                                 child: Text('- $alert',
-                                    style: const TextStyle(color: context.themeColors.text)),
+                                    style: TextStyle(color: context.themeColors.text)),
                               )),
                         ],
                       ),
@@ -158,10 +158,10 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
               color: context.themeColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(SenvoRadius.md),
             ),
-            child: const Row(
+            child: Row(
               children: [
                 Icon(Icons.info_outline, color: context.themeColors.accent),
-                SizedBox(width: SenvoSpacing.sm),
+                const SizedBox(width: SenvoSpacing.sm),
                 Expanded(
                   child: Text(
                     'Take a vital scan to see your personalized health risk analysis.',
@@ -196,9 +196,9 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(domain, style: const TextStyle(color: context.themeColors.text, fontWeight: FontWeight.w600)),
+                      Text(domain, style: TextStyle(color: context.themeColors.text, fontWeight: FontWeight.w600)),
                       const SizedBox(height: 4),
-                      const Text('Not yet assessed', style: TextStyle(color: context.themeColors.muted, fontSize: 12)),
+                      Text('Not yet assessed', style: TextStyle(color: context.themeColors.muted, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -208,7 +208,7 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                     color: context.themeColors.muted.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(SenvoRadius.sm),
                   ),
-                  child: const Text('N/A', style: TextStyle(color: context.themeColors.muted, fontSize: 12, fontWeight: FontWeight.w600)),
+                  child: Text('N/A', style: TextStyle(color: context.themeColors.muted, fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),

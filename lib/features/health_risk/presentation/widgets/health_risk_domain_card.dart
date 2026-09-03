@@ -14,7 +14,7 @@ class HealthRiskDomainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = context.themeColors.colorForRisk(domainResult.level);
+    final color = context.colorForRisk(domainResult.level);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: SenvoSpacing.sm, horizontal: SenvoSpacing.md),
@@ -68,7 +68,7 @@ class HealthRiskDomainCard extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 4),
-                  const Icon(Icons.chevron_right, color: context.themeColors.muted, size: 20),
+                  Icon(Icons.chevron_right, color: context.themeColors.muted, size: 20),
                 ],
               ),
             ],

@@ -48,7 +48,7 @@ class VitalSignCard extends StatelessWidget {
                 ),
                 if (confidence != null && confidence! < 0.6) ...[
                   const Spacer(),
-                  const Icon(Icons.warning_amber_rounded, size: 16, color: context.themeColors.riskWatch),
+                  Icon(Icons.warning_amber_rounded, size: 16, color: context.themeColors.riskWatch),
                 ],
               ],
             ),
@@ -60,12 +60,12 @@ class VitalSignCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  const Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 20),
+                  Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 20),
                   const SizedBox(width: SenvoSpacing.xs),
                   Expanded(
                     child: Text(
                       errorMessage ?? 'Error',
-                      style: const TextStyle(color: context.themeColors.riskEmergency, fontSize: 12),
+                      style: TextStyle(color: context.themeColors.riskEmergency, fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

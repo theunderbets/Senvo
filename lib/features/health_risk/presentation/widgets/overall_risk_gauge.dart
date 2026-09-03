@@ -14,7 +14,7 @@ class OverallRiskGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = context.themeColors.colorForRisk(level);
+    final color = context.colorForRisk(level);
 
     return Container(
       padding: const EdgeInsets.all(SenvoSpacing.xl),

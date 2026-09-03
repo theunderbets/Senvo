@@ -18,7 +18,7 @@ class EnvironmentalBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final riskColor = context.themeColors.colorForRisk(heatStressRisk);
+    final riskColor = context.colorForRisk(heatStressRisk);
 
     return Card(
       color: context.themeColors.surface, // Surface (dark blue)

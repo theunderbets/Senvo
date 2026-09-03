@@ -12,7 +12,7 @@ class HealthRiskDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = context.themeColors.colorForRisk(domainResult.level);
+    final color = context.colorForRisk(domainResult.level);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +61,7 @@ class HealthRiskDetailsPage extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.analytics, size: 16, color: context.themeColors.muted),
+                        Icon(Icons.analytics, size: 16, color: context.themeColors.muted),
                         const SizedBox(width: SenvoSpacing.sm),
                         Text(
                           'Confidence: ${(domainResult.confidence * 100).toStringAsFixed(0)}%',
@@ -94,7 +94,7 @@ class HealthRiskDetailsPage extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.radio_button_checked, size: 16, color: context.themeColors.accent),
+                        Icon(Icons.radio_button_checked, size: 16, color: context.themeColors.accent),
                         const SizedBox(width: SenvoSpacing.md),
                         Expanded(
                           child: Text(
@@ -142,7 +142,7 @@ class HealthRiskDetailsPage extends StatelessWidget {
                                 color: context.themeColors.accent.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(SenvoRadius.sm),
                               ),
-                              child: const Icon(Icons.lightbulb_outline, color: context.themeColors.accent, size: 20),
+                              child: Icon(Icons.lightbulb_outline, color: context.themeColors.accent, size: 20),
                             ),
                             const SizedBox(width: SenvoSpacing.md),
                             Expanded(

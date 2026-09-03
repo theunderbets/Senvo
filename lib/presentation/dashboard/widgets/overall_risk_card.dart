@@ -48,7 +48,7 @@ class OverallRiskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = context.themeColors.colorForHealthRisk(healthRiskLevel);
+    final color = context.colorForHealthRisk(healthRiskLevel);
 
     return Container(
       width: double.infinity,
