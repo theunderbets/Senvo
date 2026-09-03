@@ -29,23 +29,22 @@ class VitalSignCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = riskLevel != RiskLevel.unknown 
-        ? SenvoColors.colorForRisk(riskLevel)
-        : SenvoColors.text;
-
+    // We rely on the master prompt's visual rules.
     return Card(
+      color: SenvoColors.surface, // Surface (dark blue)
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // Rounded corners
       child: Padding(
-        padding: const EdgeInsets.all(SenvoSpacing.md),
+        padding: const EdgeInsets.all(16.0), // Padding EdgeInsets.all(16)
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: SenvoColors.muted),
-                const SizedBox(width: SenvoSpacing.sm),
+                Icon(icon, color: Colors.blueAccent, size: 20),
+                const SizedBox(width: 8),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
                 if (confidence != null && confidence! < 0.6) ...[
                   const Spacer(),
@@ -53,7 +52,7 @@ class VitalSignCard extends StatelessWidget {
                 ],
               ],
             ),
-            const SizedBox(height: SenvoSpacing.md),
+            const SizedBox(height: 12),
             if (isLoading)
               const Center(child: CircularProgressIndicator())
             else if (hasError)
@@ -61,12 +60,14 @@ class VitalSignCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  const Icon(Icons.error_outline, color: SenvoColors.riskEmergency, size: 24),
+                  const Icon(Icons.error_outline, color: SenvoColors.riskEmergency, size: 20),
                   const SizedBox(width: SenvoSpacing.xs),
                   Expanded(
                     child: Text(
-                      errorMessage ?? 'Failed to load',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: SenvoColors.riskEmergency),
+                      errorMessage ?? 'Error',
+                      style: const TextStyle(color: SenvoColors.riskEmergency, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -78,14 +79,15 @@ class VitalSignCard extends StatelessWidget {
                 children: [
                   Text(
                     value,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: color,
-                    ),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: SenvoSpacing.xs),
+                  const SizedBox(width: 4),
                   Text(
                     unit,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                 ],
               ),

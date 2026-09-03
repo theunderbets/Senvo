@@ -211,7 +211,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                             title: 'Heart Rate',
                             value: hr,
                             unit: 'bpm',
-                            icon: Icons.favorite,
+                            icon: Icons.monitor_heart,
                             riskLevel: RiskLevel.low,
                             isLoading: isLoading,
                             hasError: hasError,
@@ -245,11 +245,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                             hasError: hasError,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: SenvoSpacing.sm),
-                    Row(
-                      children: [
+                        const SizedBox(width: SenvoSpacing.sm),
                         Expanded(
                           child: FutureBuilder<SleepContext>(
                             future: _sleepFuture,
@@ -266,30 +262,6 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                                 value: value,
                                 unit: 'hrs',
                                 icon: Icons.bedtime,
-                                riskLevel: riskLevel,
-                                isLoading: isLoading,
-                                hasError: hasError,
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: SenvoSpacing.sm),
-                        Expanded(
-                          child: FutureBuilder<ActivityContext>(
-                            future: _activityFuture,
-                            builder: (context, snapshot) {
-                              final isLoading = snapshot.connectionState == ConnectionState.waiting;
-                              final hasError = snapshot.hasError;
-                              final activeMins = snapshot.hasData ? snapshot.data!.activeDuration.inMinutes : 0;
-                              final value = snapshot.hasData ? activeMins.toString() : '--';
-                              final intensity = snapshot.hasData ? snapshot.data!.intensity : 0.0;
-                              final riskLevel = intensity >= 0.5 ? RiskLevel.low : (intensity >= 0.2 ? RiskLevel.elevated : RiskLevel.high);
-
-                              return VitalSignCard(
-                                title: 'Activity',
-                                value: value,
-                                unit: 'mins',
-                                icon: Icons.directions_run,
                                 riskLevel: riskLevel,
                                 isLoading: isLoading,
                                 hasError: hasError,

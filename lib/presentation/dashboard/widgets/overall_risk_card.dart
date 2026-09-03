@@ -79,24 +79,54 @@ class OverallRiskCard extends StatelessWidget {
               ],
             )
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
+                const SizedBox(height: SenvoSpacing.sm),
+                Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Icon(_icon, color: color, size: 32),
-                    const SizedBox(width: SenvoSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        _title,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: color,
-                        ),
+                    SizedBox(
+                      width: 140,
+                      height: 140,
+                      child: CircularProgressIndicator(
+                        value: score > 0 ? (100 - score) / 100 : 1.0,
+                        strokeWidth: 12,
+                        color: color,
+                        backgroundColor: color.withValues(alpha: 0.2),
+                        strokeCap: StrokeCap.round,
                       ),
                     ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '$score',
+                          style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            color: color,
+                            fontSize: 48,
+                          ),
+                        ),
+                        Text(
+                          '/ 100',
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: color.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: SenvoSpacing.lg),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(_icon, color: color, size: 24),
+                    const SizedBox(width: SenvoSpacing.sm),
                     Text(
-                      '$score/100',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      _title.toUpperCase(),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: color,
+                        letterSpacing: 1.2,
                       ),
                     ),
                   ],
@@ -104,6 +134,7 @@ class OverallRiskCard extends StatelessWidget {
                 const SizedBox(height: SenvoSpacing.md),
                 Text(
                   message,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: SenvoColors.text.withValues(alpha: 0.9),
                   ),
