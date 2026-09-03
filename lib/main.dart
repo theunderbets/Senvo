@@ -77,6 +77,7 @@ Future<void> main() async {
 
   runApp(
     SenvoApp(
+      prefs: prefs,
       camera: camera,
       repository: repository,
       vitalsRepository: vitalsRepository,
