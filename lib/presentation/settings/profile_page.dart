@@ -126,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
               builder: (context, state) {
                 return DropdownButtonFormField<String>(
-                  value: state.locale.languageCode,
+                  initialValue: state.locale.languageCode,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(SenvoRadius.md),

@@ -7,7 +7,6 @@ import '../../core/widgets/cards/vital_sign_card.dart';
 import 'widgets/overall_risk_card.dart';
 import 'widgets/environmental_banner.dart';
 import 'widgets/health_advisory_card.dart';
-import '../../features/ppg_scan/presentation/pages/ppg_scan_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/ppg_scan/presentation/bloc/ppg_scan_bloc.dart';
 import '../../features/ppg_scan/presentation/bloc/ppg_scan_state.dart';

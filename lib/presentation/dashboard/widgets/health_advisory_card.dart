@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/senvo_theme.dart';
 
 class HealthAdvisoryCard extends StatelessWidget {
   const HealthAdvisoryCard({
