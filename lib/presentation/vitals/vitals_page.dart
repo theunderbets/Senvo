@@ -48,7 +48,7 @@ class _VitalsPageState extends State<VitalsPage> {
             return Center(
               child: Text(
                 state.errorMessage ?? 'Error loading vitals',
-                style: const TextStyle(color: SenvoColors.riskEmergency),
+                style: const TextStyle(color: context.themeColors.riskEmergency),
               ),
             );
           }
@@ -56,7 +56,7 @@ class _VitalsPageState extends State<VitalsPage> {
             return const Center(
               child: Text(
                 'No vitals data available. Please take a scan.',
-                style: TextStyle(color: SenvoColors.muted),
+                style: TextStyle(color: context.themeColors.muted),
               ),
             );
           }
@@ -77,7 +77,7 @@ class _VitalsPageState extends State<VitalsPage> {
                   ? 'Your current vitals compared against your 7-day rolling average (based on ${baseline.sampleCount} scans).'
                   : 'Your current vitals (baseline not available yet).',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SenvoColors.muted,
+                  color: context.themeColors.muted,
                 ),
               ),
               const SizedBox(height: SenvoSpacing.lg),

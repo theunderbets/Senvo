@@ -55,7 +55,7 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
             return Center(
               child: Text(
                 state.errorMessage ?? 'Error loading history',
-                style: const TextStyle(color: SenvoColors.riskEmergency),
+                style: const TextStyle(color: context.themeColors.riskEmergency),
               ),
             );
           }
@@ -63,7 +63,7 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
             return const Center(
               child: Text(
                 'No health history available.',
-                style: TextStyle(color: SenvoColors.muted),
+                style: TextStyle(color: context.themeColors.muted),
               ),
             );
           }
@@ -79,7 +79,7 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
               // Simplistic risk mapping for UI purposes (backend risk engine gives precise risk per scan)
               bool isNormal = scan.signalQualityIndex >= 0.8 && scan.heartRateBpm > 50 && scan.heartRateBpm < 100;
               String stressLabel = isNormal ? 'Normal' : 'Elevated';
-              Color labelColor = isNormal ? SenvoColors.riskNormal : SenvoColors.riskWatch;
+              Color labelColor = isNormal ? context.themeColors.riskNormal : context.themeColors.riskWatch;
 
               return Card(
                 child: Padding(
@@ -135,7 +135,7 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
         Text(
           label,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: SenvoColors.muted,
+            color: context.themeColors.muted,
           ),
         ),
         const SizedBox(height: 4),

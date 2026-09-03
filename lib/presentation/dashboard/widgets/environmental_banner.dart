@@ -18,10 +18,10 @@ class EnvironmentalBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final riskColor = SenvoColors.colorForRisk(heatStressRisk);
+    final riskColor = context.themeColors.colorForRisk(heatStressRisk);
 
     return Card(
-      color: SenvoColors.surface, // Surface (dark blue)
+      color: context.themeColors.surface, // Surface (dark blue)
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // Rounded corners
       child: Padding(
         padding: const EdgeInsets.all(16.0),

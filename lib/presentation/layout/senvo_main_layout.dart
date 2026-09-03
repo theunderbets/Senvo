@@ -98,7 +98,7 @@ class _SenvoMainLayoutState extends State<SenvoMainLayout> {
           margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: SenvoColors.surface, // Dark pill background
+            color: context.themeColors.surface, // Dark pill background
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(

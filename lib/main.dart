@@ -31,6 +31,13 @@ import 'core/sleep/sleep_repository.dart';
 
 import 'services/notifications/notification_service.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'presentation/settings/bloc/app_settings_cubit.dart';
+import 'presentation/settings/bloc/app_settings_state.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
@@ -66,6 +73,8 @@ Future<void> main() async {
   final sleepRepository = SensorSleepRepository();
   final activityRepository = SensorActivityRepository();
 
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
     SenvoApp(
       camera: camera,
@@ -81,6 +90,7 @@ Future<void> main() async {
 
 class SenvoApp extends StatelessWidget {
   const SenvoApp({
+    required this.prefs,
     required this.camera,
     required this.repository,
     required this.vitalsRepository,
@@ -90,6 +100,7 @@ class SenvoApp extends StatelessWidget {
     required this.emergencyOrchestrator,
     super.key,
   });
+  final SharedPreferences prefs;
   final CameraService camera;
   final CameraPpgRepository repository;
   final VitalsRepositoryImpl vitalsRepository;
@@ -126,20 +137,41 @@ class SenvoApp extends StatelessWidget {
             emergencyBloc: context.read<EmergencyBloc>(),
           ),
         ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Senvo',
-        theme: SenvoTheme.darkTheme,
-        home: EmergencyOverlayListener(
-          child: SplashPage(
-            camera: camera,
-            vitalsRepository: vitalsRepository,
-            environmentRepository: environmentRepository,
-            sleepRepository: sleepRepository,
-            activityRepository: activityRepository,
-          ),
+        BlocProvider(
+          create: (_) => AppSettingsCubit(prefs),
         ),
+      ],
+      child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+        builder: (context, settingsState) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Senvo',
+            themeMode: settingsState.themeMode,
+            theme: SenvoTheme.lightTheme,
+            darkTheme: SenvoTheme.darkTheme,
+            locale: settingsState.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'),
+              Locale('hi'),
+              Locale('or'),
+            ],
+            home: EmergencyOverlayListener(
+              child: SplashPage(
+                camera: camera,
+                vitalsRepository: vitalsRepository,
+                environmentRepository: environmentRepository,
+                sleepRepository: sleepRepository,
+                activityRepository: activityRepository,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

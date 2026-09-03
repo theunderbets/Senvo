@@ -49,7 +49,7 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                 child: Text(
                   'Error loading risk data:\n${state.message}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: SenvoColors.riskEmergency),
+                  style: const TextStyle(color: context.themeColors.riskEmergency),
                 ),
               ),
             );
@@ -64,8 +64,8 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                       padding: const EdgeInsets.all(SenvoSpacing.md),
                       margin: const EdgeInsets.all(SenvoSpacing.md),
                       decoration: BoxDecoration(
-                        color: SenvoColors.riskEmergency.withValues(alpha: 0.1),
-                        border: Border.all(color: SenvoColors.riskEmergency.withValues(alpha: 0.5)),
+                        color: context.themeColors.riskEmergency.withValues(alpha: 0.1),
+                        border: Border.all(color: context.themeColors.riskEmergency.withValues(alpha: 0.5)),
                         borderRadius: BorderRadius.circular(SenvoRadius.md),
                       ),
                       child: Column(
@@ -73,12 +73,12 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.warning_amber_rounded, color: SenvoColors.riskEmergency),
+                              Icon(Icons.warning_amber_rounded, color: context.themeColors.riskEmergency),
                               SizedBox(width: SenvoSpacing.sm),
                               Text(
                                 'CRITICAL ALERTS',
                                 style: TextStyle(
-                                  color: SenvoColors.riskEmergency,
+                                  color: context.themeColors.riskEmergency,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -88,7 +88,7 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
                           ...result.criticalAlerts.map((alert) => Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                                 child: Text('- $alert',
-                                    style: const TextStyle(color: SenvoColors.text)),
+                                    style: const TextStyle(color: context.themeColors.text)),
                               )),
                         ],
                       ),
@@ -155,17 +155,17 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
           child: Container(
             padding: const EdgeInsets.all(SenvoSpacing.md),
             decoration: BoxDecoration(
-              color: SenvoColors.accent.withValues(alpha: 0.1),
+              color: context.themeColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(SenvoRadius.md),
             ),
             child: const Row(
               children: [
-                Icon(Icons.info_outline, color: SenvoColors.accent),
+                Icon(Icons.info_outline, color: context.themeColors.accent),
                 SizedBox(width: SenvoSpacing.sm),
                 Expanded(
                   child: Text(
                     'Take a vital scan to see your personalized health risk analysis.',
-                    style: TextStyle(color: SenvoColors.accent),
+                    style: TextStyle(color: context.themeColors.accent),
                   ),
                 ),
               ],
@@ -184,31 +184,31 @@ class _HealthRiskDashboardPageState extends State<HealthRiskDashboardPage> {
           child: Container(
             padding: const EdgeInsets.all(SenvoSpacing.md),
             decoration: BoxDecoration(
-              color: SenvoColors.surface,
+              color: context.themeColors.surface,
               borderRadius: BorderRadius.circular(SenvoRadius.md),
-              border: Border.all(color: SenvoColors.muted.withValues(alpha: 0.2)),
+              border: Border.all(color: context.themeColors.muted.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
-                Icon(_iconForDomain(domain), color: SenvoColors.muted, size: 28),
+                Icon(_iconForDomain(domain), color: context.themeColors.muted, size: 28),
                 const SizedBox(width: SenvoSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(domain, style: const TextStyle(color: SenvoColors.text, fontWeight: FontWeight.w600)),
+                      Text(domain, style: const TextStyle(color: context.themeColors.text, fontWeight: FontWeight.w600)),
                       const SizedBox(height: 4),
-                      const Text('Not yet assessed', style: TextStyle(color: SenvoColors.muted, fontSize: 12)),
+                      const Text('Not yet assessed', style: TextStyle(color: context.themeColors.muted, fontSize: 12)),
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: SenvoColors.muted.withValues(alpha: 0.15),
+                    color: context.themeColors.muted.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(SenvoRadius.sm),
                   ),
-                  child: const Text('N/A', style: TextStyle(color: SenvoColors.muted, fontSize: 12, fontWeight: FontWeight.w600)),
+                  child: const Text('N/A', style: TextStyle(color: context.themeColors.muted, fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),

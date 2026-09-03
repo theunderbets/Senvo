@@ -14,7 +14,7 @@ class HealthRiskDomainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = SenvoColors.colorForRisk(domainResult.level);
+    final color = context.themeColors.colorForRisk(domainResult.level);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: SenvoSpacing.sm, horizontal: SenvoSpacing.md),
@@ -64,11 +64,11 @@ class HealthRiskDomainCard extends StatelessWidget {
                   Text(
                     domainResult.score.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: SenvoColors.text,
+                          color: context.themeColors.text,
                         ),
                   ),
                   const SizedBox(height: 4),
-                  const Icon(Icons.chevron_right, color: SenvoColors.muted, size: 20),
+                  const Icon(Icons.chevron_right, color: context.themeColors.muted, size: 20),
                 ],
               ),
             ],

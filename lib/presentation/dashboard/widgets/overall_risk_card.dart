@@ -48,7 +48,7 @@ class OverallRiskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = SenvoColors.colorForHealthRisk(healthRiskLevel);
+    final color = context.themeColors.colorForHealthRisk(healthRiskLevel);
 
     return Container(
       width: double.infinity,
@@ -68,12 +68,12 @@ class OverallRiskCard extends StatelessWidget {
         : hasError
           ? Row(
               children: [
-                const Icon(Icons.error_outline, color: SenvoColors.riskEmergency, size: 32),
+                const Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 32),
                 const SizedBox(width: SenvoSpacing.md),
                 Expanded(
                   child: Text(
                     errorMessage ?? 'Failed to load risk data',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: SenvoColors.riskEmergency),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.themeColors.riskEmergency),
                   ),
                 ),
               ],
@@ -136,7 +136,7 @@ class OverallRiskCard extends StatelessWidget {
                   message,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SenvoColors.text.withValues(alpha: 0.9),
+                    color: context.themeColors.text.withValues(alpha: 0.9),
                   ),
                 ),
               ],

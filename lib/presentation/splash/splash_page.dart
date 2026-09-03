@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../core/theme/senvo_theme.dart';
 import '../layout/senvo_main_layout.dart';
 import '../../core/environment/environment_repository.dart';
 import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../services/camera/camera_service.dart';
 import '../../features/vitals_history/data/repositories/vitals_repository_impl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashPage extends StatefulWidget {
   final CameraService camera;
@@ -75,8 +75,13 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    // We want the splash screen to be permanently light mode.
+    // So we use hardcoded colors representing the light theme.
+    final loc = AppLocalizations.of(context);
+    final tagline = loc?.tagline ?? 'Your health, watched over.';
+    
     return Scaffold(
-      backgroundColor: SenvoColors.background,
+      backgroundColor: const Color(0xFFFAFAFA), // Light background
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -86,66 +91,70 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             children: [
               const Spacer(flex: 3),
               Image.asset(
-                'assets/images/senvo_logo_original.png',
-                width: 180,
-                height: 180,
+                'assets/images/senvo_logo.png', // Logo without background
+                width: 150,
+                height: 150,
               ),
-              const SizedBox(height: 16),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
-                  'Your health, watched over - quietly, privately, offline.',
+                  tagline,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: SenvoColors.muted,
-                    letterSpacing: 0.5,
+                  style: const TextStyle(
+                    fontSize: 22, // Slightly increased but not as big as a title
+                    color: Color(0xFF333333),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/cvrgu_logo.jpg',
-                    height: 24,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4.0),
+                    child: Image.asset(
+                      'assets/images/cvrgu_logo.jpg',
+                      height: 18,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   const Text(
                     'C.V. Raman Global University',
                     style: TextStyle(
-                      fontSize: 14,
-                      color: SenvoColors.muted,
+                      fontSize: 16, // Matching logo height conceptually
+                      color: Color(0xFF666666),
                     ),
                   ),
                 ],
               ),
               const Spacer(flex: 2),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/images/make_in_india.jpg',
-                    height: 50,
+                    height: 40,
                   ),
+                  const SizedBox(width: 32),
                   Image.asset(
                     'assets/images/skill_india.jpg',
-                    height: 50,
+                    height: 40,
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               const Text(
                 'The Underbets',
                 style: TextStyle(
-                  fontSize: 12,
-                  color: SenvoColors.muted,
-                  fontStyle: FontStyle.italic,
+                  fontSize: 14,
+                  color: Color(0xFF666666),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
             ],
           ),
         ),

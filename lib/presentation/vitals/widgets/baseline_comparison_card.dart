@@ -25,19 +25,19 @@ class BaselineComparisonCard extends StatelessWidget {
     final isIncrease = diff > 0;
     final isSignificant = diff.abs() > (baselineValue * 0.05); // 5% diff
     
-    Color trendColor = SenvoColors.text;
+    Color trendColor = context.themeColors.text;
     IconData trendIcon = Icons.trending_flat;
 
     if (isSignificant) {
       if (isIncrease) {
         trendIcon = Icons.trending_up;
-        trendColor = isHigherWorse ? SenvoColors.riskEmergency : SenvoColors.riskNormal;
+        trendColor = isHigherWorse ? context.themeColors.riskEmergency : context.themeColors.riskNormal;
       } else {
         trendIcon = Icons.trending_down;
-        trendColor = isHigherWorse ? SenvoColors.riskNormal : SenvoColors.riskEmergency;
+        trendColor = isHigherWorse ? context.themeColors.riskNormal : context.themeColors.riskEmergency;
       }
     } else {
-      trendColor = SenvoColors.muted;
+      trendColor = context.themeColors.muted;
     }
 
     final diffString = isIncrease ? '+${diff.toStringAsFixed(1)}' : diff.toStringAsFixed(1);
@@ -50,7 +50,7 @@ class BaselineComparisonCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 20, color: SenvoColors.accent),
+                Icon(icon, size: 20, color: context.themeColors.accent),
                 const SizedBox(width: SenvoSpacing.sm),
                 Text(
                   title,

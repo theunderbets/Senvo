@@ -18,7 +18,7 @@ class NotificationsPage extends StatelessWidget {
               padding: EdgeInsets.all(SenvoSpacing.xl),
               child: Text(
                 'No new notifications.',
-                style: TextStyle(color: SenvoColors.muted),
+                style: TextStyle(color: context.themeColors.muted),
               ),
             ),
           )

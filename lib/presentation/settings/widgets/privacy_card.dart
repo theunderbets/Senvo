@@ -14,22 +14,22 @@ class PrivacyCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: SenvoColors.surface,
-          title: const Text('Clear All Health Data?', style: TextStyle(color: SenvoColors.riskEmergency)),
+          backgroundColor: context.themeColors.surface,
+          title: const Text('Clear All Health Data?', style: TextStyle(color: context.themeColors.riskEmergency)),
           content: const Text(
             'This action is irreversible. All locally stored health vitals, history, and baseline data will be permanently deleted.',
-            style: TextStyle(color: SenvoColors.text),
+            style: TextStyle(color: context.themeColors.text),
           ),
           actions: [
             TextButton(
-              child: const Text('Cancel', style: TextStyle(color: SenvoColors.muted)),
+              child: const Text('Cancel', style: TextStyle(color: context.themeColors.muted)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: SenvoColors.riskEmergency,
+                backgroundColor: context.themeColors.riskEmergency,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Delete Data'),
@@ -39,7 +39,7 @@ class PrivacyCard extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('All local health data cleared.'),
-                    backgroundColor: SenvoColors.riskEmergency,
+                    backgroundColor: context.themeColors.riskEmergency,
                   ),
                 );
               },
@@ -61,7 +61,7 @@ class PrivacyCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.security, color: SenvoColors.accent),
+                const Icon(Icons.security, color: context.themeColors.accent),
                 const SizedBox(width: SenvoSpacing.md),
                 Text(
                   'Privacy & Security',
@@ -72,19 +72,19 @@ class PrivacyCard extends StatelessWidget {
             const SizedBox(height: SenvoSpacing.md),
             const Text(
               'Your health data is encrypted and stored locally on this device. Senvo does not upload your vitals to any cloud servers without explicit permission.',
-              style: TextStyle(color: SenvoColors.muted),
+              style: TextStyle(color: context.themeColors.muted),
             ),
             const SizedBox(height: SenvoSpacing.lg),
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                icon: const Icon(Icons.delete_forever, color: SenvoColors.riskEmergency),
+                icon: const Icon(Icons.delete_forever, color: context.themeColors.riskEmergency),
                 label: const Text(
                   'Clear All Local Data',
-                  style: TextStyle(color: SenvoColors.riskEmergency),
+                  style: TextStyle(color: context.themeColors.riskEmergency),
                 ),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: SenvoColors.riskEmergency),
+                  side: const BorderSide(color: context.themeColors.riskEmergency),
                   padding: const EdgeInsets.symmetric(vertical: SenvoSpacing.md),
                 ),
                 onPressed: () => _showClearDataDialog(context),

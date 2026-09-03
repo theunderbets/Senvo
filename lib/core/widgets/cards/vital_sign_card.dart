@@ -31,7 +31,7 @@ class VitalSignCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // We rely on the master prompt's visual rules.
     return Card(
-      color: SenvoColors.surface, // Surface (dark blue)
+      color: context.themeColors.surface, // Surface (dark blue)
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // Rounded corners
       child: Padding(
         padding: const EdgeInsets.all(16.0), // Padding EdgeInsets.all(16)
@@ -48,7 +48,7 @@ class VitalSignCard extends StatelessWidget {
                 ),
                 if (confidence != null && confidence! < 0.6) ...[
                   const Spacer(),
-                  const Icon(Icons.warning_amber_rounded, size: 16, color: SenvoColors.riskWatch),
+                  const Icon(Icons.warning_amber_rounded, size: 16, color: context.themeColors.riskWatch),
                 ],
               ],
             ),
@@ -60,12 +60,12 @@ class VitalSignCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  const Icon(Icons.error_outline, color: SenvoColors.riskEmergency, size: 20),
+                  const Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 20),
                   const SizedBox(width: SenvoSpacing.xs),
                   Expanded(
                     child: Text(
                       errorMessage ?? 'Error',
-                      style: const TextStyle(color: SenvoColors.riskEmergency, fontSize: 12),
+                      style: const TextStyle(color: context.themeColors.riskEmergency, fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

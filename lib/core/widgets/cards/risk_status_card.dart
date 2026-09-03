@@ -20,7 +20,7 @@ class RiskStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = SenvoColors.colorForRisk(riskLevel);
+    final color = context.themeColors.colorForRisk(riskLevel);
     
     return Card(
       child: Padding(

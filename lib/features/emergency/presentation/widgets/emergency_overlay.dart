@@ -55,7 +55,7 @@ class _EmergencyDialogContent extends StatelessWidget {
     final bool isSending = state.smsStatus == null || state.smsStatus == SmsDispatchStatus.sent;
     
     return Scaffold(
-      backgroundColor: SenvoColors.riskEmergency,
+      backgroundColor: context.themeColors.riskEmergency,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SenvoSpacing.xl),
@@ -101,7 +101,7 @@ class _EmergencyDialogContent extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: SenvoColors.riskEmergency,
+                  foregroundColor: context.themeColors.riskEmergency,
                   padding: const EdgeInsets.symmetric(vertical: SenvoSpacing.lg),
                 ),
                 onPressed: () {

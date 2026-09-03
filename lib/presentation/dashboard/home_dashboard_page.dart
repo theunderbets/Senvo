@@ -21,7 +21,9 @@ import '../../features/vitals_history/presentation/bloc/history_bloc.dart';
 import '../../features/vitals_history/presentation/bloc/history_state.dart';
 import '../../features/vitals_history/presentation/bloc/history_event.dart';
 import '../settings/profile_page.dart';
-import '../notifications/notifications_page.dart';
+import '../settings/bloc/app_settings_cubit.dart';
+import '../settings/bloc/app_settings_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/environment/environment_repository.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../core/activity/activity_repository.dart';
@@ -75,33 +77,44 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
     }
   }
 
-  String _getGreeting() {
+  String _getGreeting(AppLocalizations loc) {
     final hour = DateTime.now().hour;
     final name = _userName.isNotEmpty && _userName != 'User' ? ', $_userName' : '';
-    if (hour < 12) return 'Good Morning$name';
-    if (hour < 17) return 'Good Afternoon$name';
-    return 'Good Evening$name';
+    if (hour < 12) return '${loc.goodMorning}$name';
+    if (hour < 17) return '${loc.goodAfternoon}$name';
+    return '${loc.goodEvening}$name';
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
             Image.asset('assets/images/senvo_logo.png', height: 32),
             const SizedBox(width: 8),
-            Text(_getGreeting()),
+            Text(_getGreeting(loc)),
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const NotificationsPage(),
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4.0),
+              child: Image.asset('assets/images/cvrgu_logo.jpg', height: 28),
+            ),
+          ),
+          BlocBuilder<AppSettingsCubit, AppSettingsState>(
+            builder: (context, state) {
+              final isDark = state.themeMode == ThemeMode.dark || 
+                (state.themeMode == ThemeMode.system && MediaQuery.of(context).platformBrightness == Brightness.dark);
+              return IconButton(
+                icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+                onPressed: () {
+                  context.read<AppSettingsCubit>().updateThemeMode(isDark ? ThemeMode.light : ThemeMode.dark);
+                },
               );
             },
           ),
@@ -156,13 +169,13 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                     score: state.riskResult.overallScore.toInt(),
                     message: state.riskResult.criticalAlerts.isNotEmpty
                         ? state.riskResult.criticalAlerts.join(' ')
-                        : 'Overall health profile is looking good.',
+                        : loc.overallHealthGood,
                   );
                 }
-                return const OverallRiskCard(
+                return OverallRiskCard(
                   healthRiskLevel: HealthRiskLevel.normal,
                   score: 0,
-                  message: 'All systems looking good! Take a scan for detailed analysis.',
+                  message: loc.allSystemsGood,
                 );
               },
             ),
@@ -171,7 +184,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Live Vitals',
+                  loc.liveVitals,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 TextButton(
@@ -182,7 +195,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                       ),
                     );
                   },
-                  child: const Text('See All'),
+                  child: Text(loc.seeAll),
                 ),
               ],
             ),
@@ -208,9 +221,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                       children: [
                         Expanded(
                           child: VitalSignCard(
-                            title: 'Heart Rate',
+                            title: loc.heartRate,
                             value: hr,
-                            unit: 'bpm',
+                            unit: loc.bpm,
                             icon: Icons.monitor_heart,
                             riskLevel: RiskLevel.low,
                             isLoading: isLoading,
@@ -220,9 +233,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                         const SizedBox(width: SenvoSpacing.sm),
                         Expanded(
                           child: VitalSignCard(
-                            title: 'SpO₂',
+                            title: loc.spo2,
                             value: spo2,
-                            unit: '%',
+                            unit: loc.percent,
                             icon: Icons.air,
                             riskLevel: RiskLevel.low,
                             isLoading: isLoading,
@@ -236,9 +249,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                       children: [
                         Expanded(
                           child: VitalSignCard(
-                            title: 'Blood Pressure',
+                            title: loc.bloodPressure,
                             value: bp,
-                            unit: 'mmHg',
+                            unit: loc.mmHg,
                             icon: Icons.monitor_heart,
                             riskLevel: RiskLevel.low,
                             isLoading: isLoading,
@@ -258,9 +271,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                               final riskLevel = quality >= 0.7 ? RiskLevel.low : (quality >= 0.4 ? RiskLevel.elevated : RiskLevel.high);
                               
                               return VitalSignCard(
-                                title: 'Sleep',
+                                title: loc.sleep,
                                 value: value,
-                                unit: 'hrs',
+                                unit: loc.hrs,
                                 icon: Icons.bedtime,
                                 riskLevel: riskLevel,
                                 isLoading: isLoading,
@@ -278,7 +291,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
     ),
             const SizedBox(height: SenvoSpacing.lg),
             Text(
-              'Active Risks',
+              loc.activeRisks,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: SenvoSpacing.sm),
@@ -289,12 +302,12 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                       (r) => r.level == RiskLevel.elevated || r.level == RiskLevel.high || r.level == RiskLevel.critical).toList();
                   
                   if (elevatedRisks.isEmpty) {
-                    return const RiskStatusCard(
-                      title: 'No Active Risks',
-                      subtitle: 'All tracked domains are within normal limits.',
+                    return RiskStatusCard(
+                      title: loc.noActiveRisks,
+                      subtitle: loc.allDomainsNormal,
                       riskLevel: RiskLevel.low,
                       icon: Icons.check_circle_outline,
-                      value: 'Normal',
+                      value: loc.normal,
                     );
                   }
 
@@ -310,19 +323,19 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                         padding: const EdgeInsets.only(bottom: SenvoSpacing.sm),
                         child: RiskStatusCard(
                           title: risk.domain,
-                          subtitle: risk.primaryContributors.isNotEmpty ? risk.primaryContributors.first : 'Elevated risk detected',
+                          subtitle: risk.primaryContributors.isNotEmpty ? risk.primaryContributors.first : loc.elevatedRiskDetected,
                           riskLevel: risk.level,
                           icon: icon,
-                          value: risk.level == RiskLevel.critical ? 'Critical' : risk.level == RiskLevel.high ? 'High' : 'Elevated',
+                          value: risk.level == RiskLevel.critical ? loc.critical : risk.level == RiskLevel.high ? loc.high : loc.elevated,
                         ),
                       );
                     }).toList(),
                   );
                 }
                 if (state is HealthRiskInitial) {
-                  return const RiskStatusCard(
-                    title: 'No Active Risks',
-                    subtitle: 'Take a measurement to see your health risks.',
+                  return RiskStatusCard(
+                    title: loc.noActiveRisks,
+                    subtitle: loc.takeMeasurement,
                     riskLevel: RiskLevel.low,
                     icon: Icons.check_circle_outline,
                     value: '-',
@@ -330,7 +343,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                 }
                 if (state is HealthRiskError) {
                   return RiskStatusCard(
-                    title: 'Error',
+                    title: loc.error,
                     subtitle: state.message,
                     riskLevel: RiskLevel.low,
                     icon: Icons.error_outline,
@@ -340,9 +353,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                 if (state is HealthRiskLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return const RiskStatusCard(
-                  title: 'No Active Risks',
-                  subtitle: 'Take a measurement to see your health risks.',
+                return RiskStatusCard(
+                  title: loc.noActiveRisks,
+                  subtitle: loc.takeMeasurement,
                   riskLevel: RiskLevel.low,
                   icon: Icons.check_circle_outline,
                   value: '-',
