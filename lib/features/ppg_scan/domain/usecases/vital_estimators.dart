@@ -90,8 +90,8 @@ class TFLiteVitalEstimator implements VitalEstimator {
       heartRateBpm: prediction.heartRateBpm.clamp(42, 240),
       spo2Percent: prediction.spo2Percent.clamp(70, 100),
       bloodPressure: BloodPressure(
-        systolic: prediction.systolicBp.round(),
-        diastolic: prediction.diastolicBp.round(),
+        systolic: (prediction.systolicBp ?? 120.0).roundToDouble(),
+        diastolic: (prediction.diastolicBp ?? 80.0).roundToDouble(),
       ),
       signalQuality: 0.85,
       timestamp: DateTime.now(),
