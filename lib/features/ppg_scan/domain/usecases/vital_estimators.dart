@@ -2,15 +2,18 @@ import 'dart:math' as math;
 import '../entities/ppg_sample.dart';
 import '../entities/vitals_result.dart';
 import '../../../../services/signal_processing/butterworth_filter.dart';
+import '../../../../services/tflite/tflite_vital_inference_service.dart';
+import '../../../../services/tflite/vital_model_input.dart';
+import 'ppg_feature_extractor.dart';
 
 abstract interface class VitalEstimator {
-  VitalsResult estimate(List<PPGSample> samples);
+  Future<VitalsResult> estimate(List<PPGSample> samples);
 }
 
 class ExperimentalVitalEstimator implements VitalEstimator {
   const ExperimentalVitalEstimator();
   @override
-  VitalsResult estimate(List<PPGSample> samples) {
+  Future<VitalsResult> estimate(List<PPGSample> samples) async {
     if (samples.length < 30) throw StateError('Insufficient samples');
     final duration = samples.last.timestamp - samples.first.timestamp;
     if (!duration.isFinite || duration <= 0) {
@@ -62,5 +65,36 @@ class ExperimentalVitalEstimator implements VitalEstimator {
   double _range(Iterable<double> values) {
     final list = values.toList();
     return list.reduce(math.max) - list.reduce(math.min);
+  }
+}
+
+class TFLiteVitalEstimator implements VitalEstimator {
+  TFLiteVitalEstimator(this.inferenceService);
+  final TFLiteVitalInferenceService inferenceService;
+
+  @override
+  Future<VitalsResult> estimate(List<PPGSample> samples) async {
+    if (samples.length < 30) throw StateError('Insufficient samples');
+    
+    // Extract features
+    final features = PPGFeatureExtractor.extract(samples);
+    
+    if (!inferenceService.isInitialized) {
+      await inferenceService.initialize();
+    }
+    
+    final input = VitalModelInput(features);
+    final prediction = await inferenceService.predict(input: input);
+    
+    return VitalsResult(
+      heartRateBpm: prediction.heartRateBpm.clamp(42, 240),
+      spo2Percent: prediction.spo2Percent.clamp(70, 100),
+      bloodPressure: BloodPressure(
+        systolic: prediction.systolicBp.round(),
+        diastolic: prediction.diastolicBp.round(),
+      ),
+      signalQuality: 0.85,
+      timestamp: DateTime.now(),
+    );
   }
 }

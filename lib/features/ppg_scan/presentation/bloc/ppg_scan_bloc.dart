@@ -50,7 +50,7 @@ class PpgScanBloc extends Bloc<PpgScanEvent, PpgScanState> {
         ),
       );
       emit(state.copyWith(status: ScanStatus.processing, torchEnabled: false));
-      final result = estimator.estimate(samples);
+      final result = await estimator.estimate(samples);
       final filtered = normalize(
         detrend(samples.map((sample) => sample.green).toList()),
       );

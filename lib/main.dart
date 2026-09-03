@@ -17,6 +17,7 @@ import 'core/environment/environment_repository.dart';
 import 'services/camera/camera_service.dart';
 import 'services/camera/frame_processor.dart';
 import 'services/permissions/permission_service.dart';
+import 'services/tflite/tflite_vital_inference_service.dart';
 
 import 'features/emergency/data/repositories/mock_emergency_repository.dart';
 import 'features/emergency/domain/emergency_models.dart';
@@ -117,7 +118,7 @@ class SenvoApp extends StatelessWidget {
         BlocProvider(
           create: (_) => PpgScanBloc(
             repository: repository,
-            estimator: const ExperimentalVitalEstimator(),
+            estimator: TFLiteVitalEstimator(TFLiteVitalInferenceService()),
             vitalsRepository: vitalsRepository,
           ),
         ),
