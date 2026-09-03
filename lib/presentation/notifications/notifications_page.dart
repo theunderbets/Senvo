@@ -12,7 +12,7 @@ class NotificationsPage extends StatelessWidget {
       ),
       body: ListView(
         padding: const EdgeInsets.all(SenvoSpacing.md),
-        children: const [
+        children: [
           Center(
             child: Padding(
               padding: EdgeInsets.all(SenvoSpacing.xl),

@@ -55,12 +55,12 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
             return Center(
               child: Text(
                 state.errorMessage ?? 'Error loading history',
-                style: const TextStyle(color: context.themeColors.riskEmergency),
+                style: TextStyle(color: context.themeColors.riskEmergency),
               ),
             );
           }
           if (state.records.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No health history available.',
                 style: TextStyle(color: context.themeColors.muted),

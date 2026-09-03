@@ -68,7 +68,7 @@ class OverallRiskCard extends StatelessWidget {
         : hasError
           ? Row(
               children: [
-                const Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 32),
+                Icon(Icons.error_outline, color: context.themeColors.riskEmergency, size: 32),
                 const SizedBox(width: SenvoSpacing.md),
                 Expanded(
                   child: Text(

@@ -48,12 +48,12 @@ class _VitalsPageState extends State<VitalsPage> {
             return Center(
               child: Text(
                 state.errorMessage ?? 'Error loading vitals',
-                style: const TextStyle(color: context.themeColors.riskEmergency),
+                style: TextStyle(color: context.themeColors.riskEmergency),
               ),
             );
           }
           if (state.records.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No vitals data available. Please take a scan.',
                 style: TextStyle(color: context.themeColors.muted),
