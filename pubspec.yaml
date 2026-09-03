@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   camera: ^0.11.2
   permission_handler: ^12.0.1
   flutter_bloc: ^9.1.1
@@ -51,6 +53,7 @@ flutter_native_splash:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/models/senvo_vitals.tflite
     - assets/models/model_metadata.json
