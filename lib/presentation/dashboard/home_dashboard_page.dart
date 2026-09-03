@@ -271,39 +271,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: SenvoSpacing.sm),
-                    Row(
-                      children: [
-                const SizedBox(width: SenvoSpacing.sm),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: SenvoColors.accent,
-                      foregroundColor: SenvoColors.background,
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(SenvoRadius.lg),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<PpgScanBloc>(context),
-                            child: PpgScanPage(
-                              cameraService: widget.camera,
-                              vitalsRepository: widget.vitalsRepository,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.camera_alt_outlined),
-                    label: const Text('Scan Vitals'),
-                  ),
-                ),
-              ],
-            ),
+
           ],
         );
       },

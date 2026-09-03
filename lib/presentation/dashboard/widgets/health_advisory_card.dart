@@ -11,41 +11,27 @@ class HealthAdvisoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(SenvoSpacing.md),
-      decoration: BoxDecoration(
-        color: SenvoColors.surface2,
-        borderRadius: BorderRadius.circular(SenvoRadius.lg),
-        border: Border.all(color: SenvoColors.border, width: 1),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.lightbulb_outline,
-            color: SenvoColors.accent,
-            size: 24,
-          ),
-          const SizedBox(width: SenvoSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Senvo AI Advisory',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: SenvoColors.accent,
-                  ),
-                ),
-                const SizedBox(height: SenvoSpacing.xs),
-                Text(
-                  advisoryText,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
+    return Card(
+      color: Colors.blue.withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.lightbulb,
+              color: Colors.blueAccent,
             ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                advisoryText,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
