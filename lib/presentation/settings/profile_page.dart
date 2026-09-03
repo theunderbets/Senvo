@@ -5,7 +5,7 @@ import '../../features/vitals_history/domain/repositories/vitals_repository.dart
 import '../../core/theme/senvo_theme.dart';
 import 'widgets/privacy_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../features/vitals_history/presentation/bloc/history_bloc.dart';
 import '../../features/vitals_history/presentation/bloc/history_event.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -158,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   radius: 32,
                   backgroundColor: context.themeColors.accent.withValues(alpha: 0.2),
-                  child: const Icon(Icons.person, size: 32, color: context.themeColors.accent),
+                  child: Icon(Icons.person, size: 32, color: context.themeColors.accent),
                 ),
                 const SizedBox(width: SenvoSpacing.lg),
                 Expanded(
@@ -190,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
               contentPadding: EdgeInsets.zero,
               title: Text(loc.dateOfBirth),
               subtitle: Text(_dob != null ? _dateFormat.format(_dob!) : loc.notSet),
-              trailing: const Icon(Icons.calendar_today, color: context.themeColors.accent),
+              trailing: Icon(Icons.calendar_today, color: context.themeColors.accent),
               onTap: () => _selectDOB(context),
             ),
           ),

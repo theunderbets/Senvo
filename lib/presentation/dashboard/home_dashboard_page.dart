@@ -23,7 +23,7 @@ import '../../features/vitals_history/presentation/bloc/history_event.dart';
 import '../settings/profile_page.dart';
 import '../settings/bloc/app_settings_cubit.dart';
 import '../settings/bloc/app_settings_state.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import '../../core/environment/environment_repository.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../core/activity/activity_repository.dart';

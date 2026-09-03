@@ -6,7 +6,7 @@ import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../services/camera/camera_service.dart';
 import '../../features/vitals_history/data/repositories/vitals_repository_impl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 class SplashPage extends StatefulWidget {
   final CameraService camera;
