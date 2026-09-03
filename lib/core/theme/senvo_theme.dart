@@ -30,7 +30,7 @@ class SenvoThemeColors extends ThemeExtension<SenvoThemeColors> {
   });
 
   @override
-  ThemeExtension<SenvoThemeColors> copyWith({
+  SenvoThemeColors copyWith({
     Color? background,
     Color? surface,
     Color? surface2,
@@ -59,7 +59,7 @@ class SenvoThemeColors extends ThemeExtension<SenvoThemeColors> {
   }
 
   @override
-  ThemeExtension<SenvoThemeColors> lerp(ThemeExtension<SenvoThemeColors>? other, double t) {
+  SenvoThemeColors lerp(ThemeExtension<SenvoThemeColors>? other, double t) {
     if (other is! SenvoThemeColors) {
       return this;
     }
