@@ -19,50 +19,57 @@ class PpgScanPage extends StatelessWidget {
   });
   final CameraService cameraService;
   final VitalsRepositoryImpl vitalsRepository;
+  
   @override
-  Widget build(BuildContext context) => BlocListener<PpgScanBloc, PpgScanState>(
-    listener: (context, state) {
-      if (state.status == ScanStatus.completed && state.result != null) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => VitalsSummaryPage(
-              result: state.result!,
-              onScanAgain: () {
-                Navigator.of(context).pop();
-                context.read<PpgScanBloc>().add(const ResetScan());
-              },
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
+    return BlocListener<PpgScanBloc, PpgScanState>(
+      listener: (context, state) {
+        if (state.status == ScanStatus.completed && state.result != null) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => VitalsSummaryPage(
+                result: state.result!,
+                onScanAgain: () {
+                  Navigator.of(context).pop();
+                  context.read<PpgScanBloc>().add(const ResetScan());
+                },
+              ),
             ),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+            children: [
+              _header(context, colorScheme, theme),
+              const SizedBox(height: 18),
+              _preview(context, colorScheme),
+              const SizedBox(height: 18),
+              _signalPanel(context, colorScheme),
+              const SizedBox(height: 18),
+              _action(context, colorScheme),
+            ],
           ),
-        );
-      }
-    },
-    child: Scaffold(
-      backgroundColor: const Color(0xff0b1719),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
-          children: [
-            _header(context),
-            const SizedBox(height: 18),
-            _preview(),
-            const SizedBox(height: 18),
-            _signalPanel(),
-            const SizedBox(height: 18),
-            _action(context),
-          ],
         ),
       ),
-    ),
-  );
-  Widget _header(BuildContext context) => Row(
+    );
+  }
+
+  Widget _header(BuildContext context, ColorScheme colorScheme, ThemeData theme) => Row(
     children: [
-      Icon(Icons.eco_outlined, color: Color(0xff63d7b0)),
-      SizedBox(width: 8),
+      Icon(Icons.eco_outlined, color: colorScheme.primary),
+      const SizedBox(width: 8),
       Text(
         'Senvo',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+        style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
       ),
-      Spacer(),
+      const Spacer(),
       IconButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
@@ -77,14 +84,15 @@ class PpgScanPage extends StatelessWidget {
       Text(
         'PPG SCAN',
         style: TextStyle(
-          color: Color(0xffa4b8b7),
+          color: colorScheme.onSurfaceVariant,
           letterSpacing: 1.2,
           fontSize: 11,
         ),
       ),
     ],
   );
-  Widget _preview() => BlocSelector<PpgScanBloc, PpgScanState, bool>(
+
+  Widget _preview(BuildContext context, ColorScheme colorScheme) => BlocSelector<PpgScanBloc, PpgScanState, bool>(
     selector: (state) => state.torchEnabled,
     builder: (context, torchEnabled) => AspectRatio(
       aspectRatio: 3 / 4,
@@ -97,21 +105,21 @@ class PpgScanPage extends StatelessWidget {
               CameraPreview(cameraService.controller!)
             else
               Container(
-                color: const Color(0xff122426),
-                child: const Center(
+                color: colorScheme.surfaceContainerHighest,
+                child: Center(
                   child: Icon(
                     Icons.camera_alt_outlined,
                     size: 52,
-                    color: Color(0xff557371),
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Color(0xaa0b1719)],
+                  colors: [Colors.transparent, Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.7)],
                 ),
               ),
             ),
@@ -125,8 +133,8 @@ class PpgScanPage extends StatelessWidget {
                     Icons.circle,
                     size: 10,
                     color: torchEnabled
-                        ? const Color(0xff63d7b0)
-                        : const Color(0xffa4b8b7),
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -141,23 +149,24 @@ class PpgScanPage extends StatelessWidget {
       ),
     ),
   );
-  Widget _signalPanel() => BlocBuilder<PpgScanBloc, PpgScanState>(
+
+  Widget _signalPanel(BuildContext context, ColorScheme colorScheme) => BlocBuilder<PpgScanBloc, PpgScanState>(
     buildWhen: (previous, current) => 
         previous.waveformSamples != current.waveformSamples ||
         previous.signalQuality != current.signalQuality,
     builder: (context, state) => Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xff122426),
+        color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'PPG SIGNAL',
             style: TextStyle(
-              color: Color(0xffa4b8b7),
+              color: colorScheme.onSurfaceVariant,
               fontSize: 11,
               letterSpacing: 1.2,
             ),
@@ -174,8 +183,8 @@ class PpgScanPage extends StatelessWidget {
                     : state.signalQuality >= .75
                     ? 'GOOD'
                     : 'FAIR',
-                style: const TextStyle(
-                  color: Color(0xff63d7b0),
+                style: TextStyle(
+                  color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -185,7 +194,8 @@ class PpgScanPage extends StatelessWidget {
       ),
     ),
   );
-  Widget _action(BuildContext context) => BlocBuilder<PpgScanBloc, PpgScanState>(
+
+  Widget _action(BuildContext context, ColorScheme colorScheme) => BlocBuilder<PpgScanBloc, PpgScanState>(
     buildWhen: (previous, current) => 
         previous.status != current.status || 
         previous.errorMessage != current.errorMessage || 
@@ -216,7 +226,7 @@ class PpgScanPage extends StatelessWidget {
               const Spacer(),
               Text(
                 '${state.elapsedTime.toStringAsFixed(1)} / 10.0 s',
-                style: const TextStyle(color: Color(0xffa4b8b7)),
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
               ),
             ],
           ),
@@ -226,12 +236,12 @@ class PpgScanPage extends StatelessWidget {
             child: LinearProgressIndicator(
               value: state.progress,
               minHeight: 8,
-              backgroundColor: const Color(0xff203638),
-              color: const Color(0xff63d7b0),
+              backgroundColor: colorScheme.surfaceContainerHighest,
+              color: colorScheme.primary,
             ),
           ),
           const SizedBox(height: 14),
-          Text(message, style: const TextStyle(color: Color(0xffa4b8b7))),
+          Text(message, style: TextStyle(color: colorScheme.onSurfaceVariant)),
           const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
