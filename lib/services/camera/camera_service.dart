@@ -8,6 +8,7 @@ class CameraService {
   bool get hasTorch => _controller != null;
 
   Future<void> initialize() async {
+    if (isReady) return;
     try {
       final cameras = await availableCameras();
       final rear = cameras

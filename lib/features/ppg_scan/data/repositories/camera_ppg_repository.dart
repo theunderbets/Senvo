@@ -59,7 +59,9 @@ class CameraPpgRepository implements PpgRepository {
       if (error is ScanException) rethrow;
       throw const ImageStreamFailed();
     } finally {
-      await camera.dispose();
+      // Keep camera active for preview, let PpgScanPage handle disposal.
+      // We still want to make sure the flash goes off if it was aborted.
+      await camera.disableTorch();
     }
   }
 }
