@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../services/camera/camera_service.dart';
 import '../../../../core/theme/senvo_theme.dart';
 import '../bloc/ppg_scan_bloc.dart';
@@ -35,8 +36,11 @@ class _PpgScanPageState extends State<PpgScanPage> {
   Future<void> _initCamera() async {
     if (!widget.cameraService.isReady) {
       try {
-        await widget.cameraService.initialize();
-        if (mounted) setState(() {});
+        final status = await Permission.camera.request();
+        if (status.isGranted) {
+          await widget.cameraService.initialize();
+          if (mounted) setState(() {});
+        }
       } catch (_) {}
     }
   }

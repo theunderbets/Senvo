@@ -82,6 +82,8 @@ class _LocalHealthHistoryPageState extends State<LocalHealthHistoryPage> {
               Color labelColor = isNormal ? context.themeColors.riskNormal : context.themeColors.riskWatch;
 
               return Card(
+                color: context.themeColors.surface2,
+                elevation: 0,
                 child: Padding(
                   padding: const EdgeInsets.all(SenvoSpacing.md),
                   child: Column(

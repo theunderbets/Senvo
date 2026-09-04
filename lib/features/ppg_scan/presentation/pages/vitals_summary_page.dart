@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/vitals_result.dart';
+import '../../../../core/theme/senvo_theme.dart';
 
 class VitalsSummaryPage extends StatelessWidget {
   const VitalsSummaryPage({
@@ -13,6 +14,7 @@ class VitalsSummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final themeColors = context.themeColors;
     
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -41,7 +43,7 @@ class VitalsSummaryPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          _quality(context, colorScheme),
+          _quality(context, colorScheme, themeColors),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -52,6 +54,7 @@ class VitalsSummaryPage extends StatelessWidget {
                 'BPM',
                 colorScheme,
                 theme,
+                themeColors,
               ),
               const SizedBox(width: 12),
               _card(
@@ -61,15 +64,16 @@ class VitalsSummaryPage extends StatelessWidget {
                 '%',
                 colorScheme,
                 theme,
+                themeColors,
               ),
             ],
           ),
           const SizedBox(height: 12),
-          _bpCard(context, colorScheme, theme),
+          _bpCard(context, colorScheme, theme, themeColors),
           const SizedBox(height: 16),
           Text(
             'SpO2 and blood pressure are experimental, non-clinical estimates. Do not use them for medical decisions.',
-            style: TextStyle(color: colorScheme.onSurfaceVariant, height: 1.4),
+            style: TextStyle(color: themeColors.muted, height: 1.4),
           ),
           const SizedBox(height: 24),
           FilledButton.icon(
@@ -90,10 +94,10 @@ class VitalsSummaryPage extends StatelessWidget {
     );
   }
 
-  Widget _quality(BuildContext context, ColorScheme colorScheme) => Container(
+  Widget _quality(BuildContext context, ColorScheme colorScheme, SenvoThemeColors themeColors) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: colorScheme.surfaceContainerHighest,
+      color: themeColors.surface2,
       borderRadius: BorderRadius.circular(16),
     ),
     child: Row(
@@ -116,18 +120,18 @@ class VitalsSummaryPage extends StatelessWidget {
     ),
   );
 
-  Widget _card(BuildContext context, String title, String value, String unit, ColorScheme colorScheme, ThemeData theme) =>
+  Widget _card(BuildContext context, String title, String value, String unit, ColorScheme colorScheme, ThemeData theme, SenvoThemeColors themeColors) =>
       Expanded(
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest,
+            color: themeColors.surface2,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyle(color: colorScheme.onSurfaceVariant)),
+              Text(title, style: TextStyle(color: themeColors.muted)),
               const SizedBox(height: 16),
               Text(
                 value,
@@ -135,25 +139,25 @@ class VitalsSummaryPage extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(unit, style: TextStyle(color: colorScheme.onSurfaceVariant)),
+              Text(unit, style: TextStyle(color: themeColors.muted)),
             ],
           ),
         ),
       );
 
-  Widget _bpCard(BuildContext context, ColorScheme colorScheme, ThemeData theme) => Container(
+  Widget _bpCard(BuildContext context, ColorScheme colorScheme, ThemeData theme, SenvoThemeColors themeColors) => Container(
     padding: const EdgeInsets.all(18),
     decoration: BoxDecoration(
-      color: colorScheme.surfaceContainerHighest,
+      color: themeColors.surface2,
       borderRadius: BorderRadius.circular(16),
     ),
     child: Row(
       children: [
-        Icon(Icons.favorite_outline, color: colorScheme.tertiary),
+        Icon(Icons.favorite_outline, color: colorScheme.primary),
         const SizedBox(width: 12),
         Text(
           'Blood pressure',
-          style: TextStyle(color: colorScheme.onSurfaceVariant),
+          style: TextStyle(color: themeColors.muted),
         ),
         const Spacer(),
         Text(
