@@ -69,13 +69,25 @@ class DatabaseManager {
   Future<void> wipeAllLocalData() async {
     final activeBox = _box;
     final activeName = _boxName;
-    if (activeBox != null && activeBox.isOpen) {
-      await activeBox.clear();
-      await activeBox.close();
-    }
-    if (activeName != null) await Hive.deleteBoxFromDisk(activeName);
-    await secureStorage.delete(_nameKey);
-    await keyManager.deleteDatabaseKey();
+    
+    try {
+      if (activeBox != null && activeBox.isOpen) {
+        await activeBox.clear();
+        await activeBox.close();
+      }
+    } catch (_) {}
+    
+    try {
+      if (activeName != null) {
+        await Hive.deleteBoxFromDisk(activeName);
+      }
+    } catch (_) {}
+    
+    try {
+      await secureStorage.delete(_nameKey);
+      await keyManager.deleteDatabaseKey();
+    } catch (_) {}
+    
     _box = null;
     _boxName = null;
     _initializing = null;
