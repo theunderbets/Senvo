@@ -158,9 +158,9 @@ class _LocalVitalsHistoryPageState extends State<LocalVitalsHistoryPage> {
         
         if (result.status == ShareResultStatus.success && context.mounted) {
            ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Successfully exported history'),
-              backgroundColor: Color(0xff63d7b0),
+            SnackBar(
+              content: const Text('Successfully exported history'),
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ),
           );
         }
@@ -211,64 +211,70 @@ class _LocalVitalsHistoryPageState extends State<LocalVitalsHistoryPage> {
 class _PrivacyIndicator extends StatelessWidget {
   const _PrivacyIndicator();
   @override
-  Widget build(BuildContext context) => const Padding(
-    padding: EdgeInsets.only(bottom: 16),
-    child: Row(
-      children: [
-        Icon(Icons.lock_outline, size: 18, color: Color(0xff63d7b0)),
-        SizedBox(width: 8),
-        Text(
-          'Stored only on this device',
-          style: TextStyle(color: Color(0xffa4b8b7)),
-        ),
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Icon(Icons.lock_outline, size: 18, color: colorScheme.primary),
+          const SizedBox(width: 8),
+          Text(
+            'Stored only on this device',
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class BaselineSummaryCard extends StatelessWidget {
   const BaselineSummaryCard({required this.baseline, super.key});
   final BaselineModel baseline;
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: const Color(0xff122426),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '7-DAY BASELINE',
-          style: TextStyle(
-            color: Color(0xff63d7b0),
-            fontSize: 11,
-            letterSpacing: 1.2,
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '7-DAY BASELINE',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontSize: 11,
+              letterSpacing: 1.2,
+            ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'HR  ${baseline.averageHeartRate.toStringAsFixed(0)} BPM   SpO2  ${baseline.averageSpo2.toStringAsFixed(1)} %',
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'BP  ${baseline.averageSystolicBp.toStringAsFixed(0)} / ${baseline.averageDiastolicBp.toStringAsFixed(0)} mmHg   Samples  ${baseline.sampleCount}',
-          style: const TextStyle(color: Color(0xffa4b8b7)),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(height: 12),
+          Text(
+            'HR  ${baseline.averageHeartRate.toStringAsFixed(0)} BPM   SpO2  ${baseline.averageSpo2.toStringAsFixed(1)} %',
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'BP  ${baseline.averageSystolicBp.toStringAsFixed(0)} / ${baseline.averageDiastolicBp.toStringAsFixed(0)} mmHg   Samples  ${baseline.sampleCount}',
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class BaselineUnavailableCard extends StatelessWidget {
   const BaselineUnavailableCard({super.key});
   @override
-  Widget build(BuildContext context) => const Padding(
-    padding: EdgeInsets.only(bottom: 16),
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 16),
     child: Text(
       '7-day baseline\nNot enough measurements yet. Complete more scans to establish your personal baseline.',
-      style: TextStyle(color: Color(0xffa4b8b7), height: 1.4),
+      style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.4),
     ),
   );
 }
@@ -285,7 +291,7 @@ class VitalHistoryCard extends StatelessWidget {
   final VoidCallback onDetails;
   @override
   Widget build(BuildContext context) => Card(
-    color: const Color(0xff122426),
+    color: Theme.of(context).colorScheme.surfaceContainerHighest,
     child: ListTile(
       title: Text(TimeOfDay.fromDateTime(record.timestamp).format(context)),
       subtitle: Text(
@@ -305,26 +311,29 @@ class VitalHistoryCard extends StatelessWidget {
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
   @override
-  Widget build(BuildContext context) => const Center(
-    child: Padding(
-      padding: EdgeInsets.all(32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.history, size: 52, color: Color(0xff557371)),
-          SizedBox(height: 16),
-          Text(
-            'No local measurements yet',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Complete your first Senvo scan to see your vitals history here.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Color(0xffa4b8b7)),
-          ),
-        ],
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.history, size: 52, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
+            const SizedBox(height: 16),
+            const Text(
+              'No local measurements yet',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Complete your first Senvo scan to see your vitals history here.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
