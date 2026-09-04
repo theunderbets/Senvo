@@ -34,15 +34,13 @@ class _PpgScanPageState extends State<PpgScanPage> {
   }
 
   Future<void> _initCamera() async {
-    if (!widget.cameraService.isReady) {
-      try {
-        final status = await Permission.camera.request();
-        if (status.isGranted) {
-          await widget.cameraService.initialize();
-          if (mounted) setState(() {});
-        }
-      } catch (_) {}
-    }
+    try {
+      final status = await Permission.camera.request();
+      if (status.isGranted) {
+        await widget.cameraService.initialize();
+        if (mounted) setState(() {});
+      }
+    } catch (_) {}
   }
 
   @override

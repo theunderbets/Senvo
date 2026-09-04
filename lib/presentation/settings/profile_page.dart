@@ -198,11 +198,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const Divider(height: SenvoSpacing.xxl),
           
           PrivacyCard(
-            onClearData: () async {
-              await widget.vitalsRepository.wipeAllLocalData();
-              if (context.mounted) {
-                context.read<HistoryBloc>().add(const ClearHistory());
-              }
+            onClearData: () {
+              context.read<HistoryBloc>().add(const ClearHistory());
             },
           ),
           
