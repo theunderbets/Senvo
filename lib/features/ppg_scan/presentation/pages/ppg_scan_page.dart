@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../services/camera/camera_service.dart';
+import '../../../../core/theme/senvo_theme.dart';
 import '../bloc/ppg_scan_bloc.dart';
 import '../bloc/ppg_scan_event.dart';
 import '../bloc/ppg_scan_state.dart';
@@ -11,7 +12,7 @@ import 'vitals_summary_page.dart';
 import '../../../vitals_history/data/repositories/vitals_repository_impl.dart';
 import '../../../vitals_history/presentation/pages/local_vitals_history_page.dart';
 
-class PpgScanPage extends StatelessWidget {
+class PpgScanPage extends StatefulWidget {
   const PpgScanPage({
     required this.cameraService,
     required this.vitalsRepository,
@@ -19,11 +20,32 @@ class PpgScanPage extends StatelessWidget {
   });
   final CameraService cameraService;
   final VitalsRepositoryImpl vitalsRepository;
-  
+
+  @override
+  State<PpgScanPage> createState() => _PpgScanPageState();
+}
+
+class _PpgScanPageState extends State<PpgScanPage> {
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  Future<void> _initCamera() async {
+    if (!widget.cameraService.isReady) {
+      try {
+        await widget.cameraService.initialize();
+        if (mounted) setState(() {});
+      } catch (_) {}
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final themeColors = context.themeColors;
     
     return BlocListener<PpgScanBloc, PpgScanState>(
       listener: (context, state) {
@@ -47,13 +69,13 @@ class PpgScanPage extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
             children: [
-              _header(context, colorScheme, theme),
+              _header(context, colorScheme, theme, themeColors),
               const SizedBox(height: 18),
-              _preview(context, colorScheme),
+              _preview(context, colorScheme, themeColors),
               const SizedBox(height: 18),
-              _signalPanel(context, colorScheme),
+              _signalPanel(context, colorScheme, themeColors),
               const SizedBox(height: 18),
-              _action(context, colorScheme),
+              _action(context, colorScheme, themeColors),
             ],
           ),
         ),
@@ -61,7 +83,7 @@ class PpgScanPage extends StatelessWidget {
     );
   }
 
-  Widget _header(BuildContext context, ColorScheme colorScheme, ThemeData theme) => Row(
+  Widget _header(BuildContext context, ColorScheme colorScheme, ThemeData theme, SenvoThemeColors themeColors) => Row(
     children: [
       Icon(Icons.eco_outlined, color: colorScheme.primary),
       const SizedBox(width: 8),
@@ -74,7 +96,7 @@ class PpgScanPage extends StatelessWidget {
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) =>
-                LocalVitalsHistoryPage(repository: vitalsRepository),
+                LocalVitalsHistoryPage(repository: widget.vitalsRepository),
           ),
         ),
         icon: const Icon(Icons.history),
@@ -84,7 +106,7 @@ class PpgScanPage extends StatelessWidget {
       Text(
         'PPG SCAN',
         style: TextStyle(
-          color: colorScheme.onSurfaceVariant,
+          color: themeColors.muted,
           letterSpacing: 1.2,
           fontSize: 11,
         ),
@@ -92,7 +114,7 @@ class PpgScanPage extends StatelessWidget {
     ],
   );
 
-  Widget _preview(BuildContext context, ColorScheme colorScheme) => BlocSelector<PpgScanBloc, PpgScanState, bool>(
+  Widget _preview(BuildContext context, ColorScheme colorScheme, SenvoThemeColors themeColors) => BlocSelector<PpgScanBloc, PpgScanState, bool>(
     selector: (state) => state.torchEnabled,
     builder: (context, torchEnabled) => AspectRatio(
       aspectRatio: 3 / 4,
@@ -101,16 +123,16 @@ class PpgScanPage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (cameraService.isReady)
-              CameraPreview(cameraService.controller!)
+            if (widget.cameraService.isReady)
+              CameraPreview(widget.cameraService.controller!)
             else
               Container(
-                color: colorScheme.surfaceContainerHighest,
+                color: themeColors.surface2,
                 child: Center(
                   child: Icon(
                     Icons.camera_alt_outlined,
                     size: 52,
-                    color: colorScheme.onSurface.withValues(alpha: 0.5),
+                    color: themeColors.text.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -134,7 +156,7 @@ class PpgScanPage extends StatelessWidget {
                     size: 10,
                     color: torchEnabled
                         ? colorScheme.primary
-                        : colorScheme.onSurfaceVariant,
+                        : themeColors.muted,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -150,14 +172,14 @@ class PpgScanPage extends StatelessWidget {
     ),
   );
 
-  Widget _signalPanel(BuildContext context, ColorScheme colorScheme) => BlocBuilder<PpgScanBloc, PpgScanState>(
+  Widget _signalPanel(BuildContext context, ColorScheme colorScheme, SenvoThemeColors themeColors) => BlocBuilder<PpgScanBloc, PpgScanState>(
     buildWhen: (previous, current) => 
         previous.waveformSamples != current.waveformSamples ||
         previous.signalQuality != current.signalQuality,
     builder: (context, state) => Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
+        color: themeColors.surface2,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -166,7 +188,7 @@ class PpgScanPage extends StatelessWidget {
           Text(
             'PPG SIGNAL',
             style: TextStyle(
-              color: colorScheme.onSurfaceVariant,
+              color: themeColors.muted,
               fontSize: 11,
               letterSpacing: 1.2,
             ),
@@ -195,7 +217,7 @@ class PpgScanPage extends StatelessWidget {
     ),
   );
 
-  Widget _action(BuildContext context, ColorScheme colorScheme) => BlocBuilder<PpgScanBloc, PpgScanState>(
+  Widget _action(BuildContext context, ColorScheme colorScheme, SenvoThemeColors themeColors) => BlocBuilder<PpgScanBloc, PpgScanState>(
     buildWhen: (previous, current) => 
         previous.status != current.status || 
         previous.errorMessage != current.errorMessage || 
@@ -226,7 +248,7 @@ class PpgScanPage extends StatelessWidget {
               const Spacer(),
               Text(
                 '${state.elapsedTime.toStringAsFixed(1)} / 10.0 s',
-                style: TextStyle(color: colorScheme.onSurfaceVariant),
+                style: TextStyle(color: themeColors.muted),
               ),
             ],
           ),
@@ -236,12 +258,12 @@ class PpgScanPage extends StatelessWidget {
             child: LinearProgressIndicator(
               value: state.progress,
               minHeight: 8,
-              backgroundColor: colorScheme.surfaceContainerHighest,
+              backgroundColor: themeColors.surface2,
               color: colorScheme.primary,
             ),
           ),
           const SizedBox(height: 14),
-          Text(message, style: TextStyle(color: colorScheme.onSurfaceVariant)),
+          Text(message, style: TextStyle(color: themeColors.muted)),
           const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,

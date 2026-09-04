@@ -80,6 +80,7 @@ class DatabaseManager {
     _boxName = null;
     _initializing = null;
     logger.info('All local health data wiped');
+    await initialize();
   }
 
   Future<void> rotateDatabaseKey() async {
