@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/senvo_theme.dart';
 
 class HealthAdvisoryCard extends StatelessWidget {
   const HealthAdvisoryCard({
@@ -26,7 +27,7 @@ class HealthAdvisoryCard extends StatelessWidget {
             Expanded(
               child: Text(
                 advisoryText,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: TextStyle(color: context.themeColors.text, fontSize: 14),
               ),
             ),
           ],

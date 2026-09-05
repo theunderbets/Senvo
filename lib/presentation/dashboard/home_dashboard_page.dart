@@ -19,6 +19,7 @@ import '../../features/health_risk/presentation/bloc/health_risk_event.dart';
 import '../../features/vitals_history/presentation/bloc/history_bloc.dart';
 import '../../features/vitals_history/presentation/bloc/history_state.dart';
 import '../../features/vitals_history/presentation/bloc/history_event.dart';
+import '../../features/health_risk/presentation/pages/health_risk_dashboard_page.dart';
 import '../settings/profile_page.dart';
 import '../settings/bloc/app_settings_cubit.dart';
 import '../settings/bloc/app_settings_state.dart';
@@ -294,9 +295,24 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
       },
     ),
             const SizedBox(height: SenvoSpacing.lg),
-            Text(
-              loc.activeRisks,
-              style: Theme.of(context).textTheme.titleMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  loc.activeRisks,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const HealthRiskDashboardPage(),
+                      ),
+                    );
+                  },
+                  child: Text(loc.seeAll),
+                ),
+              ],
             ),
             const SizedBox(height: SenvoSpacing.sm),
             BlocBuilder<HealthRiskBloc, HealthRiskState>(
