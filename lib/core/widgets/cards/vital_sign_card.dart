@@ -80,7 +80,7 @@ class VitalSignCard extends StatelessWidget {
                   Text(
                     value,
                     style: TextStyle(
-                        color: context.themeColors.textPrimary,
+                        color: context.themeColors.text,
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
                   ),
