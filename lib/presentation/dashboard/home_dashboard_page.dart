@@ -94,7 +94,12 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
           children: [
             Image.asset('assets/images/senvo_logo.png', height: 32),
             const SizedBox(width: 8),
-            Text(_getGreeting(loc)),
+            Flexible(
+              child: Text(
+                _getGreeting(loc),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
         actions: [

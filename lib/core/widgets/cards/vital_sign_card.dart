@@ -79,8 +79,8 @@ class VitalSignCard extends StatelessWidget {
                 children: [
                   Text(
                     value,
-                    style: const TextStyle(
-                        color: Colors.white,
+                    style: TextStyle(
+                        color: context.themeColors.textPrimary,
                         fontSize: 24,
                         fontWeight: FontWeight.bold),
                   ),
