@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'environment_models.dart';
 import 'environment_repository.dart';
 
@@ -58,6 +59,7 @@ class OpenWeatherMapRepository implements EnvironmentRepository {
 
   @override
   Future<EnvironmentalContext> getCurrentEnvironment() async {
+    final prefs = await SharedPreferences.getInstance();
     try {
       final loc = await _getLocation();
 
@@ -84,7 +86,7 @@ class OpenWeatherMapRepository implements EnvironmentRepository {
           }
         } catch (_) {}
 
-        return EnvironmentalContext(
+        final env = EnvironmentalContext(
           ambientTemperatureCelsius: (data['main']['temp'] as num).toDouble(),
           humidityPercent: (data['main']['humidity'] as num).toDouble(),
           aqi: aqi,
@@ -94,9 +96,36 @@ class OpenWeatherMapRepository implements EnvironmentRepository {
           cachedAt: DateTime.now(),
           source: EnvironmentalDataSource.live,
         );
+
+        // Cache the result
+        await prefs.setString('cached_env', json.encode({
+          'temp': env.ambientTemperatureCelsius,
+          'humidity': env.humidityPercent,
+          'aqi': env.aqi,
+          'time': env.cachedAt.toIso8601String(),
+        }));
+
+        return env;
       }
     } catch (e) {
-      // Fallback to defaults on any error
+      // Fallback to cache on error
+    }
+
+    final cachedStr = prefs.getString('cached_env');
+    if (cachedStr != null) {
+      try {
+        final map = json.decode(cachedStr);
+        return EnvironmentalContext(
+          ambientTemperatureCelsius: map['temp'],
+          humidityPercent: map['humidity'],
+          aqi: map['aqi'],
+          pm25: null,
+          pm10: null,
+          observedAt: DateTime.parse(map['time']),
+          cachedAt: DateTime.now(),
+          source: EnvironmentalDataSource.cached,
+        );
+      } catch (_) {}
     }
 
     return EnvironmentalContext(

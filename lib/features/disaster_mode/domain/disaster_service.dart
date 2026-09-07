@@ -1,3 +1,5 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'disaster_models.dart';
 import '../../emergency/domain/emergency_models.dart';
 
@@ -13,11 +15,11 @@ class DisasterModeServiceImpl implements DisasterModeService {
 
   @override
   Future<EmergencyReadinessResult> checkReadiness() async {
-    // Check if network is available (mocking true for now, should use connectivity plugin)
-    final hasNetwork = true;
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final hasNetwork = !connectivityResult.contains(ConnectivityResult.none);
     
-    // Check SMS permissions (mocking true for now, would typically use permission_handler)
-    final smsPermissionsGranted = true;
+    final smsStatus = await Permission.sms.status;
+    final smsPermissionsGranted = smsStatus.isGranted;
 
     final location = await locationService.getCachedLocation();
     final locationCacheAge = location != null 
