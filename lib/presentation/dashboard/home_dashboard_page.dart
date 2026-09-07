@@ -489,7 +489,6 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
         ),
           ),
         ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           context.read<EmergencyBloc>().add(

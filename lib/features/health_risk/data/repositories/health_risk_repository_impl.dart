@@ -26,7 +26,7 @@ class HealthRiskRepositoryImpl implements HealthRiskRepository {
   }
 
   @override
-  Future<List<HealthRiskRecord>> getRiskHistory({
+  Future<List<HealthRiskRecord>> getRiskRecords({
     DateTime? startTime,
     DateTime? endTime,
     int? limit,
@@ -52,10 +52,16 @@ class HealthRiskRepositoryImpl implements HealthRiskRepository {
 
   @override
   Future<HealthRiskRecord?> getLatestRiskRecord() async {
-    final records = await getRiskHistory(limit: 1);
+    final records = await getRiskRecords(limit: 1);
     if (records.isNotEmpty) {
       return records.first;
     }
     return null;
+  }
+
+  @override
+  Future<void> clearRiskRecords() async {
+    final box = await _getBox();
+    await box.clear();
   }
 }

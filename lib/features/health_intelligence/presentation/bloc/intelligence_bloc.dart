@@ -10,6 +10,7 @@ import 'intelligence_event.dart';
 import 'intelligence_state.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../domain/entities/risk_timeline_event.dart';
+import '../../../../core/health/health_models.dart';
 
 class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
   final HealthIntelligenceEngine _engine;
@@ -38,7 +39,7 @@ class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
     try {
       final now = DateTime.now();
       
-      final riskHistory = await _riskRepository.getRiskHistory(limit: 50); // Get last 50 risk evaluations
+      final riskHistory = await _riskRepository.getRiskRecords(limit: 50); // Get last 50 risk evaluations
       final vitalsHistory = await _vitalsRepository.getRecordsBetween(
         now.subtract(const Duration(days: 7)),
         now,

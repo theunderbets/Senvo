@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-import '../../../health_risk/domain/entities/health_risk_record.dart';
+import '../../domain/entities/risk_timeline_event.dart';
 import '../../../../core/theme/senvo_theme.dart';
 
 class RiskTimelineChart extends StatelessWidget {
-  final List<HealthRiskRecord> riskHistory;
+  final List<RiskTimelineEvent> events;
 
-  const RiskTimelineChart({super.key, required this.riskHistory});
+  const RiskTimelineChart({super.key, required this.events});
 
   @override
   Widget build(BuildContext context) {
-    if (riskHistory.isEmpty) {
+    if (events.isEmpty) {
       return const SizedBox(
         height: 200,
         child: Center(
@@ -24,13 +24,13 @@ class RiskTimelineChart extends StatelessWidget {
     }
 
     // Sort ascending by time for plotting
-    final sortedHistory = List<HealthRiskRecord>.from(riskHistory)
-      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    final sortedEvents = List<RiskTimelineEvent>.from(events)
+      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     // Map to spots
     final spots = <FlSpot>[];
-    double minX = sortedHistory.first.createdAt.millisecondsSinceEpoch.toDouble();
-    double maxX = sortedHistory.last.createdAt.millisecondsSinceEpoch.toDouble();
+    double minX = sortedEvents.first.timestamp.millisecondsSinceEpoch.toDouble();
+    double maxX = sortedEvents.last.timestamp.millisecondsSinceEpoch.toDouble();
 
     if (minX == maxX) {
       // If only one data point, add some padding
@@ -38,10 +38,10 @@ class RiskTimelineChart extends StatelessWidget {
       maxX += const Duration(hours: 1).inMilliseconds;
     }
 
-    for (var record in sortedHistory) {
+    for (var event in sortedEvents) {
       spots.add(FlSpot(
-        record.createdAt.millisecondsSinceEpoch.toDouble(),
-        record.riskResult.overallScore,
+        event.timestamp.millisecondsSinceEpoch.toDouble(),
+        event.overallScore,
       ));
     }
 
@@ -120,13 +120,13 @@ class RiskTimelineChart extends StatelessWidget {
                   LineChartBarData(
                     spots: spots,
                     isCurved: true,
-                    color: SenvoColors.accentBlue,
+                    color: context.themeColors.accent,
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: FlDotData(show: true),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: SenvoColors.accentBlue.withOpacity(0.2),
+                      color: context.themeColors.accent.withValues(alpha: 0.2),
                     ),
                   ),
                 ],
