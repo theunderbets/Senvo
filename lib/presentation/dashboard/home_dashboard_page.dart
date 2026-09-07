@@ -23,6 +23,8 @@ import '../../features/health_risk/presentation/pages/health_risk_dashboard_page
 import '../settings/profile_page.dart';
 import '../settings/bloc/app_settings_cubit.dart';
 import '../settings/bloc/app_settings_state.dart';
+import '../../features/health_intelligence/presentation/bloc/intelligence_bloc.dart';
+import '../../features/health_intelligence/presentation/bloc/intelligence_event.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/environment/environment_repository.dart';
 import '../../features/emergency/presentation/bloc/emergency_bloc.dart';
@@ -143,13 +145,24 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
           ),
         ],
       ),
-      body: BlocListener<PpgScanBloc, PpgScanState>(
-        listener: (context, state) {
-          if (state.status == ScanStatus.completed) {
-            context.read<HealthRiskBloc>().add(const EvaluateHealthRisk());
-            context.read<HistoryBloc>().add(LoadHistory());
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<PpgScanBloc, PpgScanState>(
+            listener: (context, state) {
+              if (state.status == ScanStatus.completed) {
+                context.read<HealthRiskBloc>().add(const EvaluateHealthRisk());
+                context.read<HistoryBloc>().add(LoadHistory());
+              }
+            },
+          ),
+          BlocListener<HealthRiskBloc, HealthRiskState>(
+            listener: (context, state) {
+              if (state is HealthRiskLoaded) {
+                context.read<IntelligenceBloc>().add(const GenerateInsights());
+              }
+            },
+          ),
+        ],
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(SenvoSpacing.md),
           child: Column(
