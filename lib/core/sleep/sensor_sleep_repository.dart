@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'sleep_models.dart';
 import 'sleep_repository.dart';
 
@@ -60,16 +60,21 @@ class SensorSleepRepository implements SleepRepository {
   }
 
   Future<void> _loadPersistedSleep() async {
-    final prefs = await SharedPreferences.getInstance();
-    final dateStr = prefs.getString(_keySleepDate);
+    const storage = FlutterSecureStorage();
+    final dateStr = await storage.read(key: _keySleepDate);
     final today = _dateKey(DateTime.now());
 
     if (dateStr == today) {
       // We have today's sleep data
-      final startMs = prefs.getInt(_keySleepStart);
-      final endMs = prefs.getInt(_keySleepEnd);
-      final durationMin = prefs.getInt(_keySleepDurationMin);
-      final quality = prefs.getDouble(_keySleepQuality);
+      final startMsStr = await storage.read(key: _keySleepStart);
+      final endMsStr = await storage.read(key: _keySleepEnd);
+      final durationMinStr = await storage.read(key: _keySleepDurationMin);
+      final qualityStr = await storage.read(key: _keySleepQuality);
+
+      final startMs = startMsStr != null ? int.tryParse(startMsStr) : null;
+      final endMs = endMsStr != null ? int.tryParse(endMsStr) : null;
+      final durationMin = durationMinStr != null ? int.tryParse(durationMinStr) : null;
+      final quality = qualityStr != null ? double.tryParse(qualityStr) : null;
 
       if (startMs != null && endMs != null && durationMin != null) {
         _lastSleepContext = SleepContext(
@@ -209,13 +214,13 @@ class SensorSleepRepository implements SleepRepository {
   }
 
   Future<void> _persistSleep(SleepContext ctx) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keySleepDate, _dateKey(DateTime.now()));
-    await prefs.setInt(_keySleepStart, ctx.sleepStart.millisecondsSinceEpoch);
-    await prefs.setInt(_keySleepEnd, ctx.sleepEnd.millisecondsSinceEpoch);
-    await prefs.setInt(_keySleepDurationMin, ctx.sleepDuration.inMinutes);
+    const storage = FlutterSecureStorage();
+    await storage.write(key: _keySleepDate, value: _dateKey(DateTime.now()));
+    await storage.write(key: _keySleepStart, value: ctx.sleepStart.millisecondsSinceEpoch.toString());
+    await storage.write(key: _keySleepEnd, value: ctx.sleepEnd.millisecondsSinceEpoch.toString());
+    await storage.write(key: _keySleepDurationMin, value: ctx.sleepDuration.inMinutes.toString());
     if (ctx.sleepQuality != null) {
-      await prefs.setDouble(_keySleepQuality, ctx.sleepQuality!);
+      await storage.write(key: _keySleepQuality, value: ctx.sleepQuality!.toString());
     }
   }
 

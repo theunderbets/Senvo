@@ -19,10 +19,11 @@ import 'services/camera/frame_processor.dart';
 import 'services/permissions/permission_service.dart';
 import 'services/tflite/tflite_vital_inference_service.dart';
 
-import 'features/emergency/data/repositories/mock_emergency_repository.dart';
 import 'features/emergency/domain/emergency_models.dart';
 import 'features/emergency/presentation/bloc/emergency_bloc.dart';
 import 'features/emergency/presentation/widgets/emergency_overlay.dart';
+import 'features/emergency/data/services/real_location_service.dart';
+import 'features/emergency/data/services/real_sms_service.dart';
 import 'core/mocks/mock_repositories.dart';
 import 'core/activity/sensor_activity_repository.dart';
 import 'core/activity/activity_repository.dart';
@@ -64,9 +65,10 @@ Future<void> main() async {
   );
   
   final emergencyOrchestrator = EmergencyOrchestrator(
-    locationService: MockLocationService(),
-    smsService: MockEmergencySmsService(),
+    locationService: RealLocationService(),
+    smsService: RealSmsService(),
     contacts: const [
+      // TODO: Fetch real contacts from user settings
       EmergencyContact(name: 'Emergency Services', phoneNumber: '911'),
     ],
   );

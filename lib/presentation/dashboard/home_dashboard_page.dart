@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/theme/senvo_theme.dart';
 import '../../core/risk/risk_enums.dart';
 import '../../core/widgets/cards/risk_status_card.dart';
@@ -69,10 +69,11 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
   }
 
   Future<void> _loadUserName() async {
-    final prefs = await SharedPreferences.getInstance();
+    const storage = FlutterSecureStorage();
     if (mounted) {
+      final name = await storage.read(key: 'user_name');
       setState(() {
-        _userName = prefs.getString('user_name') ?? 'User';
+        _userName = name ?? 'User';
       });
     }
   }

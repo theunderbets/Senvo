@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import '../../features/vitals_history/domain/repositories/vitals_repository.dart';
 import '../../core/theme/senvo_theme.dart';
@@ -37,10 +37,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadProfile() async {
-    final prefs = await SharedPreferences.getInstance();
+    const storage = FlutterSecureStorage();
+    final name = await storage.read(key: 'user_name');
+    final dobStr = await storage.read(key: 'user_dob');
+    
     setState(() {
-      _nameController.text = prefs.getString('user_name') ?? 'User';
-      final dobStr = prefs.getString('user_dob');
+      _nameController.text = name ?? 'User';
       if (dobStr != null) {
         try {
           _dob = _dateFormat.parse(dobStr);
@@ -51,10 +53,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _saveProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_name', _nameController.text);
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'user_name', value: _nameController.text);
     if (_dob != null) {
-      await prefs.setString('user_dob', _dateFormat.format(_dob!));
+      await storage.write(key: 'user_dob', value: _dateFormat.format(_dob!));
     }
   }
 

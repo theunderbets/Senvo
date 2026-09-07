@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../../core/activity/activity_models.dart';
 import '../../../../core/activity/activity_repository.dart';
 import '../../../../core/environment/environment_models.dart';
@@ -95,9 +95,9 @@ class HealthRiskBloc extends Bloc<HealthRiskEvent, HealthRiskState> {
         signalQuality: latest.signalQualityIndex,
       );
 
-      final prefs = await SharedPreferences.getInstance();
+      const storage = FlutterSecureStorage();
       int? userAge;
-      final dobStr = prefs.getString('user_dob');
+      final dobStr = await storage.read(key: 'user_dob');
       if (dobStr != null) {
         try {
           final dob = DateTime.parse(dobStr);
