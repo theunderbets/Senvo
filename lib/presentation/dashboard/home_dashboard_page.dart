@@ -25,6 +25,9 @@ import '../settings/bloc/app_settings_cubit.dart';
 import '../settings/bloc/app_settings_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/environment/environment_repository.dart';
+import '../../features/emergency/presentation/bloc/emergency_bloc.dart';
+import '../../features/emergency/presentation/bloc/emergency_event.dart';
+import '../../features/emergency/domain/emergency_models.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_models.dart';
@@ -426,12 +429,21 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                     );
                   },
                 );
-              },
-            ),
-          ],
         ),
       ),
-    ),
-  );
-}
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          context.read<EmergencyBloc>().add(
+            TriggerEmergency(
+              alertType: EmergencyAlertType.manualEmergency,
+              customHeadline: 'User triggered manual SOS.',
+            ),
+          );
+        },
+        backgroundColor: context.themeColors.error,
+        icon: const Icon(Icons.sos, color: Colors.white),
+        label: const Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
 }
