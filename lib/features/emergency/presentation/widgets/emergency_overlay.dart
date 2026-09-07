@@ -52,8 +52,6 @@ class _EmergencyDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isSending = state.smsStatus == null || state.smsStatus == SmsDispatchStatus.sent;
-    
     return Scaffold(
       backgroundColor: context.themeColors.riskEmergency,
       body: SafeArea(

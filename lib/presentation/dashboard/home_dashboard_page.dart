@@ -31,7 +31,6 @@ import '../../features/emergency/domain/emergency_models.dart';
 import '../../core/sleep/sleep_repository.dart';
 import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_models.dart';
-import '../../core/activity/activity_models.dart';
 import '../../core/environment/environment_models.dart';
 import '../../features/health_intelligence/presentation/bloc/intelligence_bloc.dart';
 import '../../features/health_intelligence/presentation/bloc/intelligence_state.dart';
@@ -61,7 +60,6 @@ class HomeDashboardPage extends StatefulWidget {
 
 class _HomeDashboardPageState extends State<HomeDashboardPage> {
   late Future<SleepContext> _sleepFuture;
-  late Future<ActivityContext> _activityFuture;
   late Stream<EnvironmentalContext> _envStream;
   String _userName = 'User';
 
@@ -70,7 +68,6 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
     super.initState();
     _loadUserName();
     _sleepFuture = widget.sleepRepository.getCurrentSleepContext();
-    _activityFuture = widget.activityRepository.getCurrentActivityContext();
     _envStream = widget.environmentRepository.watchEnvironment();
     context.read<HistoryBloc>().add(LoadHistory());
     context.read<HealthRiskBloc>().add(const EvaluateHealthRisk());

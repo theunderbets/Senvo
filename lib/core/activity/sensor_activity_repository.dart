@@ -22,7 +22,6 @@ class SensorActivityRepository implements ActivityRepository {
   static const int _windowSize = 50;
 
   // Session tracking
-  DateTime _sessionStart = DateTime.now();
   Duration _activeDuration = Duration.zero;
   Duration _sedentaryDuration = Duration.zero;
   DateTime _lastClassification = DateTime.now();
@@ -30,8 +29,6 @@ class SensorActivityRepository implements ActivityRepository {
   double _currentIntensity = 0.0;
 
   void _startTracking() {
-    _sessionStart = DateTime.now();
-
     // Subscribe to user accelerometer (gravity-free)
     _accelSub = userAccelerometerEventStream(
       samplingPeriod: const Duration(milliseconds: 50),
