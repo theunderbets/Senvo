@@ -33,6 +33,10 @@ import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_models.dart';
 import '../../core/activity/activity_models.dart';
 import '../../core/environment/environment_models.dart';
+import '../../features/health_intelligence/presentation/bloc/intelligence_bloc.dart';
+import '../../features/health_intelligence/presentation/bloc/intelligence_state.dart';
+import '../../features/health_intelligence/presentation/widgets/insight_card.dart';
+import '../../features/health_intelligence/presentation/widgets/risk_timeline_chart.dart';
 
 class HomeDashboardPage extends StatefulWidget {
   const HomeDashboardPage({
@@ -429,6 +433,58 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                     );
                   },
                 );
+              },
+            ),
+            const SizedBox(height: SenvoSpacing.lg),
+            Text(
+              'Health Intelligence',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: SenvoSpacing.sm),
+            BlocBuilder<IntelligenceBloc, IntelligenceState>(
+              builder: (context, state) {
+                if (state is IntelligenceLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is IntelligenceLoaded) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (state.timelineEvents.isNotEmpty) ...[
+                        Text(
+                          'Risk Timeline (7 Days)',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: SenvoSpacing.xs),
+                        SizedBox(
+                          height: 200,
+                          child: RiskTimelineChart(events: state.timelineEvents),
+                        ),
+                        const SizedBox(height: SenvoSpacing.md),
+                      ],
+                      if (state.insights.isNotEmpty) ...[
+                        Text(
+                          'Key Insights',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: SenvoSpacing.xs),
+                        ...state.insights.map((insight) => Padding(
+                              padding: const EdgeInsets.only(bottom: SenvoSpacing.sm),
+                              child: InsightCard(insight: insight),
+                            )),
+                      ] else ...[
+                        const Text('No insights available yet. Collect more data.')
+                      ],
+                    ],
+                  );
+                } else if (state is IntelligenceError) {
+                  return Text('Error: ${state.message}', style: TextStyle(color: Theme.of(context).colorScheme.error));
+                }
+                return const Text('Run an evaluation to generate insights.');
+              },
+            ),
+          ],
+        ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

@@ -11,6 +11,9 @@ import 'features/vitals_history/presentation/bloc/history_bloc.dart';
 import 'features/health_risk/presentation/bloc/health_risk_bloc.dart';
 import 'features/health_risk/domain/engines/unified_risk_engine.dart';
 import 'features/health_risk/data/repositories/health_risk_repository_impl.dart';
+import 'features/health_intelligence/domain/engines/intelligence_engine.dart';
+import 'features/health_intelligence/presentation/bloc/intelligence_bloc.dart';
+import 'features/health_intelligence/presentation/bloc/intelligence_event.dart';
 import 'core/database/database_key_manager.dart';
 import 'core/database/database_manager.dart';
 import 'core/security/secure_storage_service.dart';
@@ -154,6 +157,16 @@ class SenvoApp extends StatelessWidget {
             environmentRepository: environmentRepository,
             emergencyBloc: emergencyBloc,
           ),
+        ),
+        BlocProvider(
+          create: (context) => IntelligenceBloc(
+            engine: HealthIntelligenceEngine(),
+            riskRepository: HealthRiskRepositoryImpl(),
+            vitalsRepository: vitalsRepository,
+            activityRepository: activityRepository,
+            sleepRepository: sleepRepository,
+            environmentRepository: environmentRepository,
+          )..add(const GenerateInsights()),
         ),
         BlocProvider(
           create: (_) => AppSettingsCubit(prefs),
