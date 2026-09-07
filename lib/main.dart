@@ -10,6 +10,7 @@ import 'features/vitals_history/data/repositories/vitals_repository_impl.dart';
 import 'features/vitals_history/presentation/bloc/history_bloc.dart';
 import 'features/health_risk/presentation/bloc/health_risk_bloc.dart';
 import 'features/health_risk/domain/engines/unified_risk_engine.dart';
+import 'features/health_risk/data/repositories/health_risk_repository_impl.dart';
 import 'core/database/database_key_manager.dart';
 import 'core/database/database_manager.dart';
 import 'core/security/secure_storage_service.dart';
@@ -146,7 +147,7 @@ class SenvoApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HealthRiskBloc(
             engine: UnifiedHealthRiskEngine(),
-            riskRepository: MockHealthRiskRepository(),
+            riskRepository: HealthRiskRepositoryImpl(),
             activityRepository: activityRepository,
             sleepRepository: sleepRepository,
             vitalsRepository: vitalsRepository,
