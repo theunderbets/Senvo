@@ -30,6 +30,9 @@ import 'core/environment/openweathermap_repository.dart';
 import 'core/sleep/sensor_sleep_repository.dart';
 import 'core/sleep/sleep_repository.dart';
 
+import 'features/emergency/domain/fall_detection.dart';
+import 'features/emergency/domain/fall_detection_service.dart';
+
 import 'services/notifications/notification_service.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,6 +77,13 @@ Future<void> main() async {
   final sleepRepository = SensorSleepRepository();
   final activityRepository = SensorActivityRepository();
 
+  final emergencyBloc = EmergencyBloc(orchestrator: emergencyOrchestrator);
+  final fallDetectionService = FallDetectionService(
+    engine: FallDetectionEngine(),
+    emergencyBloc: emergencyBloc,
+  );
+  fallDetectionService.start();
+
   final prefs = await SharedPreferences.getInstance();
 
   runApp(
@@ -86,6 +96,7 @@ Future<void> main() async {
       sleepRepository: sleepRepository,
       activityRepository: activityRepository,
       emergencyOrchestrator: emergencyOrchestrator,
+      emergencyBloc: emergencyBloc,
     ),
   );
 }
@@ -100,6 +111,7 @@ class SenvoApp extends StatelessWidget {
     required this.sleepRepository,
     required this.activityRepository,
     required this.emergencyOrchestrator,
+    required this.emergencyBloc,
     super.key,
   });
   final SharedPreferences prefs;
@@ -110,6 +122,7 @@ class SenvoApp extends StatelessWidget {
   final SleepRepository sleepRepository;
   final ActivityRepository activityRepository;
   final EmergencyOrchestrator emergencyOrchestrator;
+  final EmergencyBloc emergencyBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +135,8 @@ class SenvoApp extends StatelessWidget {
             vitalsRepository: vitalsRepository,
           ),
         ),
-        BlocProvider(
-          create: (_) => EmergencyBloc(orchestrator: emergencyOrchestrator),
+        BlocProvider.value(
+          value: emergencyBloc,
         ),
         BlocProvider(
           create: (_) => HistoryBloc(vitalsRepository),
@@ -136,7 +149,7 @@ class SenvoApp extends StatelessWidget {
             sleepRepository: sleepRepository,
             vitalsRepository: vitalsRepository,
             environmentRepository: environmentRepository,
-            emergencyBloc: context.read<EmergencyBloc>(),
+            emergencyBloc: emergencyBloc,
           ),
         ),
         BlocProvider(
