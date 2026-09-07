@@ -499,13 +499,13 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
             ),
           );
         },
-        backgroundColor: context.themeColors.error,
+        backgroundColor: context.themeColors.riskEmergency,
         icon: const Icon(Icons.sos, color: Colors.white),
         label: const Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     ),
     const DisasterOverlay(),
-   ];
-   return Stack(children: children); 
+      ],
+    );
   }
 }

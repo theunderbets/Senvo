@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/disaster_models.dart';
 
 abstract class DisasterModeEvent extends Equatable {
   const DisasterModeEvent();

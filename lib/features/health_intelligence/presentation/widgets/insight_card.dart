@@ -16,28 +16,28 @@ class InsightCard extends StatelessWidget {
       case InsightType.positiveTrend:
         icon = Icons.trending_up;
         iconColor = Colors.green;
-        bgColor = Colors.green.withOpacity(0.1);
+        bgColor = Colors.green.withValues(alpha: 0.1);
         break;
       case InsightType.anomaly:
         icon = Icons.warning_amber_rounded;
         iconColor = Colors.orange;
-        bgColor = Colors.orange.withOpacity(0.1);
+        bgColor = Colors.orange.withValues(alpha: 0.1);
         break;
       case InsightType.caution:
         icon = Icons.error_outline;
         iconColor = Colors.red;
-        bgColor = Colors.red.withOpacity(0.1);
+        bgColor = Colors.red.withValues(alpha: 0.1);
         break;
       case InsightType.educational:
         icon = Icons.lightbulb_outline;
         iconColor = Colors.blue;
-        bgColor = Colors.blue.withOpacity(0.1);
+        bgColor = Colors.blue.withValues(alpha: 0.1);
         break;
     }
 
     return Card(
       elevation: 0,
-      color: Colors.white.withOpacity(0.05),
+      color: Colors.white.withValues(alpha: 0.05),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,7 +83,7 @@ class InsightCard extends StatelessWidget {
             Text(
               insight.description,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 fontSize: 14,
                 height: 1.4,
               ),
@@ -93,13 +93,13 @@ class InsightCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   insight.relatedDomain!,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     fontSize: 12,
                   ),
                 ),

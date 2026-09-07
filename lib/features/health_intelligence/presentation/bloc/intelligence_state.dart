@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/health_insight.dart';
+import '../../domain/entities/risk_timeline_event.dart';
 
 abstract class IntelligenceState extends Equatable {
   const IntelligenceState();
@@ -18,11 +19,12 @@ class IntelligenceLoading extends IntelligenceState {
 
 class IntelligenceLoaded extends IntelligenceState {
   final List<HealthInsight> insights;
+  final List<RiskTimelineEvent> timelineEvents;
   
-  const IntelligenceLoaded(this.insights);
+  const IntelligenceLoaded(this.insights, this.timelineEvents);
 
   @override
-  List<Object?> get props => [insights];
+  List<Object?> get props => [insights, timelineEvents];
 }
 
 class IntelligenceError extends IntelligenceState {

@@ -170,9 +170,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   onChanged: (bool value) {
                     context.read<AppSettingsCubit>().updateDisasterMode(value);
                   },
-                  activeColor: context.themeColors.error,
+                  activeThumbColor: context.themeColors.riskEmergency,
                   contentPadding: EdgeInsets.zero,
-                  secondary: Icon(Icons.wifi_off, color: state.isDisasterMode ? context.themeColors.error : context.themeColors.muted),
+                  secondary: Icon(Icons.wifi_off, color: state.isDisasterMode ? context.themeColors.riskEmergency : context.themeColors.muted),
                 );
               },
             ),

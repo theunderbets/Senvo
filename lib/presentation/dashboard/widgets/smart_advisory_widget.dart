@@ -15,10 +15,10 @@ class SmartAdvisoryWidget extends StatelessWidget {
   final SleepContext? sleepContext;
 
   const SmartAdvisoryWidget({
-    Key? key,
+    super.key,
     this.environmentalContext,
     this.sleepContext,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

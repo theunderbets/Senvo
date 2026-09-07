@@ -28,7 +28,6 @@ import 'features/emergency/presentation/bloc/emergency_bloc.dart';
 import 'features/emergency/presentation/widgets/emergency_overlay.dart';
 import 'features/emergency/data/services/real_location_service.dart';
 import 'features/emergency/data/services/real_sms_service.dart';
-import 'core/mocks/mock_repositories.dart';
 import 'core/activity/sensor_activity_repository.dart';
 import 'core/activity/activity_repository.dart';
 import 'core/environment/openweathermap_repository.dart';

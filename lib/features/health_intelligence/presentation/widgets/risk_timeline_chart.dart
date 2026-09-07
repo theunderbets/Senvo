@@ -49,7 +49,7 @@ class RiskTimelineChart extends StatelessWidget {
       height: 250,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -76,7 +76,7 @@ class RiskTimelineChart extends StatelessWidget {
                   drawVerticalLine: false,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       strokeWidth: 1,
                     );
                   },
@@ -95,7 +95,7 @@ class RiskTimelineChart extends StatelessWidget {
                         if (value == minX || value == maxX || spots.length < 5) {
                           return Text(
                             DateFormat('MM/dd HH:mm').format(date),
-                            style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 10),
+                            style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 10),
                           );
                         }
                         return const Text('');
@@ -109,7 +109,7 @@ class RiskTimelineChart extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toInt().toString(),
-                          style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 10),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 10),
                         );
                       },
                     ),

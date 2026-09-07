@@ -42,7 +42,7 @@ class HealthIntelligenceEngine {
     }
 
     // 2. Sleep Quality Anomaly
-    if (currentSleep.sleepDuration != null && currentSleep.sleepDuration!.inHours < 5) {
+    if (currentSleep.sleepDuration.inHours < 5) {
       final sleepRisk = latestRisk.domainResults['Fatigue/Sleep'];
       if (sleepRisk != null && (sleepRisk.level == RiskLevel.elevated || sleepRisk.level == RiskLevel.high)) {
         insights.add(HealthInsight(

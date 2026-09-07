@@ -9,6 +9,7 @@ import '../../domain/engines/intelligence_engine.dart';
 import 'intelligence_event.dart';
 import 'intelligence_state.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../domain/entities/risk_timeline_event.dart';
 
 class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
   final HealthIntelligenceEngine _engine;
@@ -19,19 +20,13 @@ class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
   final EnvironmentRepository _environmentRepository;
 
   IntelligenceBloc({
-    required HealthIntelligenceEngine engine,
-    required HealthRiskRepository riskRepository,
-    required VitalsRepository vitalsRepository,
-    required ActivityRepository activityRepository,
-    required SleepRepository sleepRepository,
-    required EnvironmentRepository environmentRepository,
-  })  : _engine = engine,
-        _riskRepository = riskRepository,
-        _vitalsRepository = vitalsRepository,
-        _activityRepository = activityRepository,
-        _sleepRepository = sleepRepository,
-        _environmentRepository = environmentRepository,
-        super(const IntelligenceInitial()) {
+    required this._engine,
+    required this._riskRepository,
+    required this._vitalsRepository,
+    required this._activityRepository,
+    required this._sleepRepository,
+    required this._environmentRepository,
+  })  : super(const IntelligenceInitial()) {
     on<GenerateInsights>(_onGenerateInsights);
   }
 
@@ -100,7 +95,13 @@ class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
         currentEnvironment: environment,
       );
 
-      emit(IntelligenceLoaded(insights));
+      final timelineEvents = riskHistory.map((risk) => RiskTimelineEvent(
+        timestamp: risk.timestamp,
+        overallScore: risk.overallScore,
+        domainResults: risk.domainResults,
+      )).toList();
+
+      emit(IntelligenceLoaded(insights, timelineEvents));
     } catch (e) {
       emit(IntelligenceError(e.toString()));
     }
