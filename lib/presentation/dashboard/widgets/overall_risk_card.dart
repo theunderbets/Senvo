@@ -100,14 +100,14 @@ class OverallRiskCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '$score',
+                          '${100 - score}',
                           style: Theme.of(context).textTheme.displayLarge?.copyWith(
                             color: color,
                             fontSize: 48,
                           ),
                         ),
                         Text(
-                          '/ 100',
+                          'Health Index',
                           style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: color.withValues(alpha: 0.7),
                           ),
