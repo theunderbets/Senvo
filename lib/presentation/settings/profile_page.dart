@@ -152,6 +152,34 @@ class _ProfilePageState extends State<ProfilePage> {
           
           const Divider(height: SenvoSpacing.xxl),
 
+          // Disaster / Offline Mode
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: SenvoSpacing.lg, vertical: SenvoSpacing.sm),
+            child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+              builder: (context, state) {
+                return SwitchListTile(
+                  title: Text(
+                    'Disaster / Offline Mode',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subtitle: Text(
+                    'Enable offline health advisory and SOS functionality when internet is unavailable.',
+                    style: TextStyle(color: context.themeColors.muted, fontSize: 12),
+                  ),
+                  value: state.isDisasterMode,
+                  onChanged: (bool value) {
+                    context.read<AppSettingsCubit>().updateDisasterMode(value);
+                  },
+                  activeColor: context.themeColors.error,
+                  contentPadding: EdgeInsets.zero,
+                  secondary: Icon(Icons.wifi_off, color: state.isDisasterMode ? context.themeColors.error : context.themeColors.muted),
+                );
+              },
+            ),
+          ),
+          
+          const Divider(height: SenvoSpacing.xxl),
+
           // Basic Profile Header
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: SenvoSpacing.lg, vertical: SenvoSpacing.md),

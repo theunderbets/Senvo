@@ -6,7 +6,7 @@ import '../../core/widgets/cards/risk_status_card.dart';
 import '../../core/widgets/cards/vital_sign_card.dart';
 import 'widgets/overall_risk_card.dart';
 import 'widgets/environmental_banner.dart';
-import 'widgets/health_advisory_card.dart';
+import 'widgets/smart_advisory_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/ppg_scan/presentation/bloc/ppg_scan_bloc.dart';
 import '../../features/ppg_scan/presentation/bloc/ppg_scan_state.dart';
@@ -414,8 +414,19 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
               },
             ),
             const SizedBox(height: SenvoSpacing.lg),
-            const HealthAdvisoryCard(
-              advisoryText: 'Your heart rate is elevated and you had poor sleep last night. Given the high ambient temperature and moderate AQI, prioritize hydration and avoid strenuous activity outdoors for the next few hours.',
+            StreamBuilder<EnvironmentalContext>(
+              stream: _envStream,
+              builder: (context, envSnapshot) {
+                return FutureBuilder<SleepContext>(
+                  future: _sleepFuture,
+                  builder: (context, sleepSnapshot) {
+                    return SmartAdvisoryWidget(
+                      environmentalContext: envSnapshot.data,
+                      sleepContext: sleepSnapshot.data,
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),

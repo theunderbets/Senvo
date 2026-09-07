@@ -17,6 +17,7 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
 
   static const _themeKey = 'app_theme_mode';
   static const _localeKey = 'app_locale';
+  static const _disasterModeKey = 'app_disaster_mode';
 
   void _loadSettings() {
     final themeStr = _prefs.getString(_themeKey);
@@ -32,7 +33,13 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
       locale = Locale(localeStr);
     }
 
-    emit(state.copyWith(themeMode: themeMode, locale: locale));
+    final isDisasterMode = _prefs.getBool(_disasterModeKey) ?? false;
+
+    emit(state.copyWith(
+      themeMode: themeMode, 
+      locale: locale,
+      isDisasterMode: isDisasterMode,
+    ));
   }
 
   Future<void> updateThemeMode(ThemeMode themeMode) async {
@@ -46,5 +53,10 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   Future<void> updateLocale(Locale locale) async {
     await _prefs.setString(_localeKey, locale.languageCode);
     emit(state.copyWith(locale: locale));
+  }
+
+  Future<void> updateDisasterMode(bool isDisasterMode) async {
+    await _prefs.setBool(_disasterModeKey, isDisasterMode);
+    emit(state.copyWith(isDisasterMode: isDisasterMode));
   }
 }
