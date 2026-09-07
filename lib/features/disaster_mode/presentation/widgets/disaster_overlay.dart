@@ -60,7 +60,7 @@ class DisasterOverlay extends StatelessWidget {
               ),
               onPressed: () {
                 context.read<EmergencyBloc>().add(
-                  const TriggerEmergency(alertType: EmergencyAlertType.manualEmergency),
+                  TriggerEmergency(alertType: EmergencyAlertType.manualEmergency),
                 );
               },
               child: const Text('TRIGGER OFFLINE SOS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

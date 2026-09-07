@@ -3,8 +3,8 @@ import '../../../../core/activity/activity_models.dart';
 import '../../../../core/environment/environment_models.dart';
 import '../../../../core/risk/risk_enums.dart';
 import '../../../../core/sleep/sleep_models.dart';
+import '../../../../core/health/health_models.dart';
 import '../../../health_risk/domain/entities/health_risk_record.dart';
-import '../../../vitals_history/domain/entities/baseline_model.dart';
 import '../../../vitals_history/domain/entities/vital_record.dart';
 import '../entities/health_insight.dart';
 
@@ -72,7 +72,7 @@ class HealthIntelligenceEngine {
             relatedDomain: 'Cardiovascular',
             generatedAt: now,
           ));
-        } else if (avgRecentHr <= baseline.averageHeartRateBpm! && latestRisk.overallLevel == RiskLevel.normal) {
+        } else if (avgRecentHr <= baseline.averageHeartRateBpm! && latestRisk.overallLevel == RiskLevel.low) {
           insights.add(HealthInsight(
             id: _uuid.v4(),
             title: 'Optimal Recovery',

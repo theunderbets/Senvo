@@ -3,7 +3,7 @@ import '../../../../core/activity/activity_repository.dart';
 import '../../../../core/environment/environment_repository.dart';
 import '../../../../core/sleep/sleep_repository.dart';
 import '../../../health_risk/domain/repositories/health_risk_repository.dart';
-import '../../../vitals_history/domain/entities/baseline_model.dart';
+
 import '../../../vitals_history/domain/repositories/vitals_repository.dart';
 import '../../domain/engines/intelligence_engine.dart';
 import 'intelligence_event.dart';
@@ -97,9 +97,9 @@ class IntelligenceBloc extends Bloc<IntelligenceEvent, IntelligenceState> {
       );
 
       final timelineEvents = riskHistory.map((risk) => RiskTimelineEvent(
-        timestamp: risk.timestamp,
-        overallScore: risk.overallScore,
-        domainResults: risk.domainResults,
+        timestamp: risk.createdAt,
+        overallScore: risk.riskResult.overallScore,
+        domainResults: risk.riskResult.domainResults,
       )).toList();
 
       emit(IntelligenceLoaded(insights, timelineEvents));

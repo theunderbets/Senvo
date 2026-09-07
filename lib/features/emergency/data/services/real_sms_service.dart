@@ -22,8 +22,8 @@ class RealSmsService implements EmergencySmsService {
     buffer.writeln('EMERGENCY ALERT: ${message.explanation}');
     
     if (message.vitals != null) {
-      buffer.writeln('Heart Rate: ${message.vitals!.heartRate.round()} BPM');
-      buffer.writeln('SpO2: ${(message.vitals!.spO2 * 100).round()}%');
+      buffer.writeln('Heart Rate: ${message.vitals!.heartRateBpm?.round() ?? '--'} BPM');
+      buffer.writeln('SpO2: ${((message.vitals!.spo2Percent ?? 0.0) * 100).round()}%');
     }
     
     if (message.location != null) {

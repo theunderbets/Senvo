@@ -33,7 +33,7 @@ class FakeRepository implements PpgRepository {
 
 class FakeEstimator implements VitalEstimator {
   @override
-  VitalsResult estimate(List<PPGSample> samples) => VitalsResult(
+  Future<VitalsResult> estimate(List<PPGSample> samples) async => VitalsResult(
     heartRateBpm: 72,
     spo2Percent: 98,
     bloodPressure: const BloodPressure(systolic: 118, diastolic: 76),
