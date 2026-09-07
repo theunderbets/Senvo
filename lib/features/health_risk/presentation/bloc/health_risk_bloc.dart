@@ -109,16 +109,31 @@ class HealthRiskBloc extends Bloc<HealthRiskEvent, HealthRiskState> {
         } catch (_) {}
       }
 
-      // WHO-defined normal baselines for adults
-      final baseline = PersonalBaseline(
-        age: userAge,
-        averageHeartRateBpm: 75.0,  // WHO: 60-100 bpm, midpoint ~75
-        averageSpo2Percent: 97.0,   // WHO: >=95% normal
-        averageSystolicBp: 120.0,   // WHO: <120 mmHg optimal
-        averageDiastolicBp: 80.0,   // WHO: <80 mmHg optimal
-        sampleCount: 1,
-        calculatedAt: now,
-      );
+      final baselineModel = await _vitalsRepository.getRollingBaseline(now: now);
+      
+      PersonalBaseline baseline;
+      if (baselineModel != null) {
+        baseline = PersonalBaseline(
+          age: userAge,
+          averageHeartRateBpm: baselineModel.averageHeartRate,
+          averageSpo2Percent: baselineModel.averageSpo2,
+          averageSystolicBp: baselineModel.averageSystolicBp,
+          averageDiastolicBp: baselineModel.averageDiastolicBp,
+          sampleCount: baselineModel.sampleCount,
+          calculatedAt: baselineModel.calculatedAt,
+        );
+      } else {
+        // WHO-defined normal baselines for adults fallback
+        baseline = PersonalBaseline(
+          age: userAge,
+          averageHeartRateBpm: 75.0,
+          averageSpo2Percent: 97.0,
+          averageSystolicBp: 120.0,
+          averageDiastolicBp: 80.0,
+          sampleCount: 1,
+          calculatedAt: now,
+        );
+      }
 
       const config = SystemRiskConfiguration();
 
