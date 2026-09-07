@@ -38,6 +38,10 @@ import 'core/sleep/sleep_repository.dart';
 import 'features/emergency/domain/fall_detection.dart';
 import 'features/emergency/domain/fall_detection_service.dart';
 
+import 'features/disaster_mode/domain/disaster_service.dart';
+import 'features/disaster_mode/presentation/bloc/disaster_mode_bloc.dart';
+import 'features/disaster_mode/presentation/bloc/disaster_mode_event.dart';
+
 import 'services/notifications/notification_service.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,6 +88,8 @@ Future<void> main() async {
   final activityRepository = SensorActivityRepository();
 
   final emergencyBloc = EmergencyBloc(orchestrator: emergencyOrchestrator);
+  final disasterService = DisasterModeServiceImpl(locationService: RealLocationService());
+  final disasterBloc = DisasterModeBloc(disasterService: disasterService)..add(CheckDisasterReadiness());
   final fallDetectionService = FallDetectionService(
     engine: FallDetectionEngine(),
     emergencyBloc: emergencyBloc,
@@ -103,6 +109,7 @@ Future<void> main() async {
       activityRepository: activityRepository,
       emergencyOrchestrator: emergencyOrchestrator,
       emergencyBloc: emergencyBloc,
+      disasterBloc: disasterBloc,
     ),
   );
 }
@@ -118,6 +125,7 @@ class SenvoApp extends StatelessWidget {
     required this.activityRepository,
     required this.emergencyOrchestrator,
     required this.emergencyBloc,
+    required this.disasterBloc,
     super.key,
   });
   final SharedPreferences prefs;
@@ -129,6 +137,7 @@ class SenvoApp extends StatelessWidget {
   final ActivityRepository activityRepository;
   final EmergencyOrchestrator emergencyOrchestrator;
   final EmergencyBloc emergencyBloc;
+  final DisasterModeBloc disasterBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +152,9 @@ class SenvoApp extends StatelessWidget {
         ),
         BlocProvider.value(
           value: emergencyBloc,
+        ),
+        BlocProvider.value(
+          value: disasterBloc,
         ),
         BlocProvider(
           create: (_) => HistoryBloc(vitalsRepository),

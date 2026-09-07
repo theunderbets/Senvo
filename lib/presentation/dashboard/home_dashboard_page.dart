@@ -37,6 +37,7 @@ import '../../features/health_intelligence/presentation/bloc/intelligence_bloc.d
 import '../../features/health_intelligence/presentation/bloc/intelligence_state.dart';
 import '../../features/health_intelligence/presentation/widgets/insight_card.dart';
 import '../../features/health_intelligence/presentation/widgets/risk_timeline_chart.dart';
+import '../../features/disaster_mode/presentation/widgets/disaster_overlay.dart';
 
 class HomeDashboardPage extends StatefulWidget {
   const HomeDashboardPage({
@@ -97,8 +98,10 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     
-    return Scaffold(
-      appBar: AppBar(
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
         title: Row(
           children: [
             Image.asset('assets/images/senvo_logo.png', height: 32),
@@ -500,6 +503,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
         icon: const Icon(Icons.sos, color: Colors.white),
         label: const Text('SOS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
-    );
+    ),
+    const DisasterOverlay(),
+   ];
+   return Stack(children: children); 
   }
 }
