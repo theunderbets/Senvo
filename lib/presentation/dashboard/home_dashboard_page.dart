@@ -54,7 +54,7 @@ class HomeDashboardPage extends StatefulWidget {
 class _HomeDashboardPageState extends State<HomeDashboardPage> {
   late Future<SleepContext> _sleepFuture;
   late Future<ActivityContext> _activityFuture;
-  late Future<EnvironmentalContext> _envFuture;
+  late Stream<EnvironmentalContext> _envStream;
   String _userName = 'User';
 
   @override
@@ -63,7 +63,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
     _loadUserName();
     _sleepFuture = widget.sleepRepository.getCurrentSleepContext();
     _activityFuture = widget.activityRepository.getCurrentActivityContext();
-    _envFuture = widget.environmentRepository.getCurrentEnvironment();
+    _envStream = widget.environmentRepository.watchEnvironment();
     context.read<HistoryBloc>().add(LoadHistory());
     context.read<HealthRiskBloc>().add(const EvaluateHealthRisk());
   }
@@ -383,8 +383,8 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
               },
             ),
             const SizedBox(height: SenvoSpacing.lg),
-            FutureBuilder<EnvironmentalContext>(
-              future: _envFuture,
+            StreamBuilder<EnvironmentalContext>(
+              stream: _envStream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
