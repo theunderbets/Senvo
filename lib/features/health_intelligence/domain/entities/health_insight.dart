@@ -3,6 +3,7 @@ enum InsightType {
   anomaly,
   caution,
   educational,
+  pattern,
 }
 
 enum InsightUrgency {

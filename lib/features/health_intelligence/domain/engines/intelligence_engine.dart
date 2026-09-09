@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:uuid/uuid.dart';
 import '../../../../core/activity/activity_models.dart';
 import '../../../../core/environment/environment_models.dart';
@@ -94,9 +93,9 @@ class HealthIntelligenceEngine {
 
     // Blood Pressure
     if (baseline.averageSystolicBp != null && baseline.averageDiastolicBp != null) {
-      final validBps = recentVitals.where((v) => v.systolicBp != null && v.diastolicBp != null).toList();
+      final validBps = recentVitals.toList();
       if (validBps.isNotEmpty) {
-        final avgSys = validBps.map((v) => v.systolicBp!).reduce((a, b) => a + b) / validBps.length;
+        final avgSys = validBps.map((v) => v.systolicBp).reduce((a, b) => a + b) / validBps.length;
         if (avgSys > baseline.averageSystolicBp! + 15) {
           insights.add(HealthInsight(
             id: _uuid.v4(),
@@ -113,9 +112,9 @@ class HealthIntelligenceEngine {
 
     // SpO2
     if (baseline.averageSpo2Percent != null) {
-      final validSpo2 = recentVitals.where((v) => v.spo2Percent != null).toList();
+      final validSpo2 = recentVitals.toList();
       if (validSpo2.isNotEmpty) {
-        final avgSpo2 = validSpo2.map((v) => v.spo2Percent!).reduce((a, b) => a + b) / validSpo2.length;
+        final avgSpo2 = validSpo2.map((v) => v.spo2Percent).reduce((a, b) => a + b) / validSpo2.length;
         if (avgSpo2 < baseline.averageSpo2Percent! - 3.0 && avgSpo2 < 95.0) {
           insights.add(HealthInsight(
             id: _uuid.v4(),
@@ -233,12 +232,12 @@ class HealthIntelligenceEngine {
       }
     }
 
-    if (baseline.averageSystolicBp != null && latest.systolicBp != null) {
-      if (latest.systolicBp! > baseline.averageSystolicBp! + 30 && activity.state == ActivityState.resting) {
+    if (baseline.averageSystolicBp != null) {
+      if (latest.systolicBp > baseline.averageSystolicBp! + 30 && activity.state == ActivityState.resting) {
         insights.add(HealthInsight(
            id: _uuid.v4(),
            title: 'Sudden Blood Pressure Elevation',
-           description: 'Your systolic blood pressure reading (${latest.systolicBp!.toStringAsFixed(0)}) is significantly higher than your baseline while resting.',
+           description: 'Your systolic blood pressure reading (${latest.systolicBp.toStringAsFixed(0)}) is significantly higher than your baseline while resting.',
            type: InsightType.anomaly,
            urgency: InsightUrgency.high,
            relatedDomain: 'Cardiovascular',
