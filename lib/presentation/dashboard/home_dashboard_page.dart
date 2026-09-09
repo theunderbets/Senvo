@@ -34,7 +34,6 @@ import '../../core/sleep/sleep_repository.dart';
 import '../../core/activity/activity_repository.dart';
 import '../../core/sleep/sleep_models.dart';
 import '../../core/environment/environment_models.dart';
-import '../../features/health_intelligence/presentation/bloc/intelligence_bloc.dart';
 import '../../features/health_intelligence/presentation/bloc/intelligence_state.dart';
 import '../../features/health_intelligence/presentation/widgets/insight_card.dart';
 import '../../features/health_intelligence/presentation/widgets/risk_timeline_chart.dart';
