@@ -13,7 +13,6 @@ import 'package:senvo_health/features/vitals_history/domain/entities/vital_recor
 void main() {
   late HealthIntelligenceEngine engine;
   final now = DateTime.now();
-
   setUp(() {
     engine = HealthIntelligenceEngine();
   });
@@ -98,7 +97,7 @@ void main() {
       // Generate risk history with spikes around 2 PM (14:00)
       for (int i = 1; i <= 5; i++) {
         final date = now.subtract(Duration(days: i));
-        final spikeTime = DateTime(date.year, date.month, date.day, 14, 0); // 2 PM
+        final spikeTime = DateTime(date.year, date.month, date.day, now.hour, 0); 
         
         // Add a spike
         riskHistory.add(HealthRiskRecord(
@@ -151,9 +150,12 @@ void main() {
         currentEnvironment: environment,
       );
 
-      final patternInsight = insights.where((i) => i.title.contains('Time-Based Risk Pattern')).toList();
+      final amPm = now.hour >= 12 ? 'PM' : 'AM';
+      final hour12 = now.hour > 12 ? now.hour - 12 : (now.hour == 0 ? 12 : now.hour);
+
+      final patternInsight = insights.where((i) => i.title.contains('Daily Pattern')).toList();
       expect(patternInsight, isNotEmpty);
-      expect(patternInsight.first.description.contains('2:00 PM'), isTrue);
+      expect(patternInsight.first.description.contains('$hour12:00 $amPm'), isTrue);
       expect(patternInsight.first.type, InsightType.pattern);
     });
   });

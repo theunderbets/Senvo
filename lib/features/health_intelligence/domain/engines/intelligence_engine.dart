@@ -324,7 +324,7 @@ class HealthIntelligenceEngine {
              id: _uuid.v4(),
              title: 'Daily Pattern Detected',
              description: 'You historically experience higher health risk around $hour12:00 $amPm. Consider pacing yourself and hydrating during this period.',
-             type: InsightType.educational,
+             type: InsightType.pattern,
              urgency: InsightUrgency.low,
              relatedDomain: 'General',
              generatedAt: now,
