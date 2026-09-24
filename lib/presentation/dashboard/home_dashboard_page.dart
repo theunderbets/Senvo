@@ -69,7 +69,9 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
     super.initState();
     _loadUserName();
     _sleepFuture = widget.sleepRepository.getCurrentSleepContext();
-    _envStream = widget.environmentRepository.watchEnvironment();
+    _envStream = widget.environmentRepository
+        .watchEnvironment()
+        .asBroadcastStream();
     context.read<HistoryBloc>().add(LoadHistory());
     context.read<HealthRiskBloc>().add(const EvaluateHealthRisk());
   }
@@ -202,13 +204,15 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
                         );
                       } else if (state is HealthRiskLoaded) {
                         HealthRiskLevel hLevel = HealthRiskLevel.normal;
-                        if (state.riskResult.overallLevel == RiskLevel.elevated) {
+                        if (state.riskResult.overallLevel ==
+                            RiskLevel.elevated) {
                           hLevel = HealthRiskLevel.watch;
                         }
                         if (state.riskResult.overallLevel == RiskLevel.high) {
                           hLevel = HealthRiskLevel.alert;
                         }
-                        if (state.riskResult.overallLevel == RiskLevel.critical) {
+                        if (state.riskResult.overallLevel ==
+                            RiskLevel.critical) {
                           hLevel = HealthRiskLevel.emergency;
                         }
                         return OverallRiskCard(
@@ -588,6 +592,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
             ),
           ),
           floatingActionButton: FloatingActionButton.extended(
+            heroTag: 'dashboard-sos-fab',
             onPressed: () {
               context.read<EmergencyBloc>().add(
                 TriggerEmergency(

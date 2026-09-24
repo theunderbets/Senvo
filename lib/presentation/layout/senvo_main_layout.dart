@@ -51,9 +51,7 @@ class _SenvoMainLayoutState extends State<SenvoMainLayout> {
       ),
       const LocalHealthHistoryPage(),
       const NotificationsPage(),
-      ProfilePage(
-        vitalsRepository: widget.vitalsRepository,
-      ),
+      ProfilePage(vitalsRepository: widget.vitalsRepository),
     ];
   }
 
@@ -81,12 +79,10 @@ class _SenvoMainLayoutState extends State<SenvoMainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true, // Needed for floating nav bar
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        heroTag: 'scan-fab',
         backgroundColor: Colors.blueAccent,
         shape: const CircleBorder(),
         onPressed: _openScanPage,
@@ -112,9 +108,19 @@ class _SenvoMainLayoutState extends State<SenvoMainLayout> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildNavItem(Icons.home_outlined, Icons.home_rounded, 0, 'Home'),
-              _buildNavItem(Icons.history_outlined, Icons.history_rounded, 1, 'History'),
+              _buildNavItem(
+                Icons.history_outlined,
+                Icons.history_rounded,
+                1,
+                'History',
+              ),
               const SizedBox(width: 48), // Space for FAB
-              _buildNavItem(Icons.notifications_outlined, Icons.notifications_rounded, 2, 'Alerts'),
+              _buildNavItem(
+                Icons.notifications_outlined,
+                Icons.notifications_rounded,
+                2,
+                'Alerts',
+              ),
               _buildNavItem(Icons.person_outline, Icons.person, 3, 'Profile'),
             ],
           ),
@@ -123,7 +129,12 @@ class _SenvoMainLayoutState extends State<SenvoMainLayout> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, IconData activeIcon, int index, String label) {
+  Widget _buildNavItem(
+    IconData icon,
+    IconData activeIcon,
+    int index,
+    String label,
+  ) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
