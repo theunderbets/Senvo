@@ -48,6 +48,12 @@ subprojects {
             add("implementation", "androidx.concurrent:concurrent-futures:1.2.0")
         }
     }
+
+    plugins.withId("com.android.library") {
+        extensions.configure<com.android.build.api.dsl.LibraryExtension> {
+            namespace = namespace ?: project.group.toString()
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {
