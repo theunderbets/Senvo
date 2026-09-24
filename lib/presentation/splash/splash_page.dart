@@ -28,7 +28,8 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -39,7 +40,10 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animationController);
     _animationController.forward();
 
     _initializeApp();
@@ -79,7 +83,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     // So we use hardcoded colors representing the light theme.
     final loc = AppLocalizations.of(context);
     final tagline = loc?.tagline ?? 'Your health, watched over.';
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA), // Light background
       body: SafeArea(
@@ -91,7 +95,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             children: [
               const Spacer(flex: 3),
               Image.asset(
-                'assets/images/senvo_logo.png', // Logo without background
+                'assets/images/logo.png', // Logo without background
                 width: 150,
                 height: 150,
               ),
@@ -102,7 +106,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                   tagline,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 22, // Slightly increased but not as big as a title
+                    fontSize:
+                        22, // Slightly increased but not as big as a title
                     color: Color(0xFF333333),
                     fontWeight: FontWeight.w500,
                   ),
@@ -134,15 +139,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/make_in_india.jpg',
-                    height: 40,
-                  ),
+                  Image.asset('assets/images/make_in_india.jpg', height: 40),
                   const SizedBox(width: 32),
-                  Image.asset(
-                    'assets/images/skill_india.jpg',
-                    height: 40,
-                  ),
+                  Image.asset('assets/images/skill_india.jpg', height: 40),
                 ],
               ),
               const SizedBox(height: 16),
