@@ -33,6 +33,11 @@ class InsightCard extends StatelessWidget {
         iconColor = Colors.blue;
         bgColor = Colors.blue.withValues(alpha: 0.1);
         break;
+      case InsightType.pattern:
+        icon = Icons.insights;
+        iconColor = Colors.teal;
+        bgColor = Colors.teal.withValues(alpha: 0.1);
+        break;
     }
 
     return Card(
@@ -67,14 +72,21 @@ class InsightCard extends StatelessWidget {
                 ),
                 if (insight.urgency == InsightUrgency.high)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
                       'HIGH',
-                      style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
               ],
@@ -103,8 +115,8 @@ class InsightCard extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-              )
-            ]
+              ),
+            ],
           ],
         ),
       ),

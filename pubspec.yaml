@@ -42,13 +42,13 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/images/senvo_logo_original.png"
+  image_path: "assets/images/senvo_logo.png"
   adaptive_icon_background: "#0F1B24"
-  adaptive_icon_foreground: "assets/images/senvo_logo_original.png"
+  adaptive_icon_foreground: "assets/images/senvo_logo.png"
 
 flutter_native_splash:
   color: "#0F1B24"
-  image: "assets/images/senvo_logo_original.png"
+  image: "assets/images/senvo_logo.png"
   android: true
   ios: false
 
@@ -60,7 +60,6 @@ flutter:
     - assets/models/model_metadata.json
     - assets/images/logo.png
     - assets/images/senvo_logo.png
-    - assets/images/senvo_logo_original.png
     - assets/images/skill_india.jpg
     - assets/images/make_in_india.jpg
     - assets/images/cvrgu_logo.jpg
